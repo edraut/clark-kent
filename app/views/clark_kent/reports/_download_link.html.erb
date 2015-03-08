@@ -1,0 +1,14 @@
+<% if @report_result_name %>
+	<%= link_to 're-download full csv', '',
+			data: {
+				listener: true,
+				channel: @report_result_name,
+				key: 'report_result_url',
+				progress_indicator: true,
+				trigger_on_message: true } %>
+<% else %>
+	<%= link_to 'download full csv', (download_link_report_url(@report.id) + '?' + request.query_parameters.to_param),
+			data: {
+				ajax_link: true,
+				ajax_target: '#download_link' } %>
+<% end %>

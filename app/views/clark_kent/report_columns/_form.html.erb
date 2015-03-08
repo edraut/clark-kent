@@ -1,0 +1,50 @@
+<div class="ih-row editing">
+  <%= simple_form_for report_column,
+      defaults: {
+        wrapper_html: { class: 'span2'},
+        input_html: { class: 'input-medium' },
+        label_html: { class: 'quiet'}},
+      html: {
+        class: 'form-inline',
+        data: {
+          ajax_form: true,
+          sub_type: "AddALineForm",
+          ajax_target: report_column.new_record? ? '#report_column_list' : "#report_column_#{report_column.id}",
+          insert_method: report_column.new_record? ? 'append' : 'html',
+          container: '#new_report_column_container',
+          ajax_flash: true } } do |f| %>
+    <div class="ih-span one-fifth">
+      <%= f.input :report_id, as: :hidden %>
+      <% if report_column.new_record? %>
+        <%= f.input :column_name, collection: @report.available_columns, prompt: 'select column' %>
+      <% else %>
+        <div class="ih-row quiet">Column Name</div>
+        <div class="ih-row"><%= report_column.column_name %></div>
+      <% end %>
+    </div>
+    <div class="ih-span one-fifth">
+      <%= f.input :column_order %>
+    </div>
+    <div class="ih-span one-fifth">
+      <% if !report_column.new_record? and report_column.summarizable? %>
+        <%= f.input :summary_method, collection: ReportColumn::SummaryMethods %>
+      <% else %>
+        &nbsp;
+      <% end %>
+    </div>
+    <div class="ih-span one-fifth">
+      <% unless report_column.report.sort_column.present? and report_column.report.sort_column != report_column %>
+        <%= f.input :report_sort, collection: [['A->Z','ascending'],['Z->A','descending']], include_blank: true %>
+      <% end %>
+    </div>
+    <div class="ih-span right margin-top">
+      <%= f.button :submit %>
+      <% unless report_column.new_record? %>
+        &nbsp; <%= link_to 'cancel', report_column_url(report_column),
+          data: {
+            ajax_link: "true", ajax_target: "#report_column_#{report_column.id}" } %>
+        &nbsp; <%= link_to '&otimes;'.html_safe, report_column_url(report_column), class: "delete", data: {ajax_delete: "true", ajax_target: "#report_column_#{report_column.id}" }, tabindex: "-1" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

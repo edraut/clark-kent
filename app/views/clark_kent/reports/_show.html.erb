@@ -1,0 +1,21 @@
+<div class="ih-span one-quarter">
+	<%= @report.name %>
+</div>
+<div class="ih-span one-quarter">
+	<span class="quiet">a row for every</span> <%= @report.resource_type_pretty.singularize %>
+</div>
+<div class="ih-span one-quarter">
+	<span class="quite">shared with</span> <%= @report.sharing_scope_pretty %>
+</div>
+<div class="ih-span one-quarter right">
+  <%= link_to 'clone', clone_report_url(@report),
+      method: :post,
+      style: 'margin-left: 10px',
+      class: 'right' %>
+
+	<%= link_to 'edit', edit_report_url(@report),
+    data: {
+			ajax_link: true,
+			ajax_target: '#report_info_container' },
+			class: 'right' %>
+</div>

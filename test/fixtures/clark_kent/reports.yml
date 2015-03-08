@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  resource_type: MyString
+  sharing_scope_type: MyString
+  sharing_scope_id: 1
+
+two:
+  name: MyString
+  resource_type: MyString
+  sharing_scope_type: MyString
+  sharing_scope_id: 1

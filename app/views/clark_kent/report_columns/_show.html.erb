@@ -1,0 +1,20 @@
+<div class="ih-row read-only">
+	<div class="ih-span one-fifth">
+		<%= report_column.column_name %>
+	</div>
+	<div class="ih-span one-fifth">
+		<%= report_column.column_order %>
+	</div>
+	<div class="ih-span one-fifth">
+		<%= report_column.summary_method.present? ? "summarize: #{report_column.summary_method}" : '' %>
+	</div>
+	<div class="ih-span one-fifth">
+		<%= report_column.report_sort_pretty %>
+	</div>
+	<div class="ih-span right">
+		<%= link_to 'edit', edit_report_column_url(report_column),
+				data: {
+					ajax_link: true,
+					ajax_target: "#report_column_#{report_column.id}" } %>
+	</div>
+</div>

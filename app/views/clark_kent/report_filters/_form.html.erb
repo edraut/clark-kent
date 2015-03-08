@@ -1,0 +1,58 @@
+<div class="ih-row editing">
+  <%= simple_form_for report_filter,
+      as: report_filter,
+      url: report_filter.new_record? ? report_filters_url : report_filter_url(report_filter),
+      defaults: {
+        wrapper_html: { class: 'span2'},
+        input_html: { class: 'input-medium' },
+        label_html: { class: 'quiet'}},
+      html: {
+        id: "report_filter_form_#{report_filter.object_id}",
+        class: 'form-inline',
+        data: {
+          ajax_form: true,
+          sub_type: "AddALineForm",
+          ajax_target: report_filter.new_record? ? "#report_filter_list_#{dom_id(report_filter.filterable)}" : "#report_filter_#{report_filter.id}",
+          insert_method: report_filter.new_record? ? 'append' : 'html',
+          container: "#new_report_filter_container_#{dom_id(report_filter.filterable)}",
+          ajax_flash: true } } do |f| %>
+    <div class="ih-span one-third">
+      <%= f.input :filterable_id, as: :hidden %>
+      <%= f.input :filterable_type, as: :hidden %>
+      <% if report_filter.new_record? %>
+        <%= f.input :filter_name, collection: report_filter.filterable.available_filter_options,
+              input_html: {
+                data: {
+                  revealer: 'true',
+                  sub_type: 'FormFieldRevealer',
+                  revealer_children_id: "filter_value_options_#{report_filter.object_id}" },
+                id: "report_filter_filter_name_#{report_filter.object_id}"},
+              include_blank: false %>
+      <% else %>
+        <div class="ih-row quiet">Filter Name</div>
+        <div class="ih-row"><%= report_filter.filter_name %></div>
+      <% end %>
+    </div>
+    <% if report_filter.new_record? %>
+      <div class="ih-span one-third" data-revealer-target="filter_value_options_<%= report_filter.object_id %>">
+        <% report_filter.filterable.available_filters.each do |name,label| %>
+          <div data-revealer_id="filter_value_options_<%= report_filter.object_id %>" data-revealer-trigger="<%= name %>" id="filter_value_options_<%= name %>">
+            <%= render partial: report_filter.filterable.filter_kind(name) + '_edit', locals: {f: f, report_filter: report_filter, name: name} %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="ih-span one-third">
+        <%= render partial: report_filter.filterable.filter_kind(report_filter.filter_name) + '_edit', locals: {f: f, report_filter: report_filter, name: report_filter.filter_name} %>
+      </div>
+    <% end %>
+    <div class="ih-span right margin-top">
+      <%= f.button :submit %>
+      <% unless report_filter.new_record? %>
+        &nbsp; <%= link_to 'cancel', report_filter_url(report_filter),
+          data: {ajax_link: "true", ajax_target: "#report_filter_#{report_filter.id}"} %>
+        &nbsp; <%= link_to '&otimes;'.html_safe, report_filter_url(report_filter), class: "delete", data: {ajax_delete: "true", ajax_target: "#report_filter_#{report_filter.id}" }, tabindex: "-1" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

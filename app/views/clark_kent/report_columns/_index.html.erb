@@ -1,0 +1,16 @@
+  <div id="report_column_container">
+    <h3>Report Columns</h3>
+    <div id="report_column_list" class="ih-row">
+      <% for report_column in @report.report_columns %>
+        <%= render partial: '/clark_kent/report_columns/show_wrapper', locals: {report_column: report_column} %>
+      <% end %>
+    </div>
+
+    <div class="ih-row margin-top">
+      <%= link_to 'Add a Column', new_report_column_url(report_id: @report.id), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: '#new_report_column_container'} %>
+    </div>
+
+    <div id="new_report_column_container" class="ih-row margin-top">
+
+    </div>
+  </div>

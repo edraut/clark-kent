@@ -1,0 +1,11 @@
+<div class="ih-row read-only">
+	<div class="ih-span">
+		<%= user_report_email.user.full_name %>
+	</div>
+	<div class="ih-span right">
+		<%= link_to 'edit', edit_user_report_email_url(user_report_email),
+      data: {
+				ajax_link: true,
+				ajax_target: "#user_report_email_#{user_report_email.id}" } %>
+	</div>
+</div>

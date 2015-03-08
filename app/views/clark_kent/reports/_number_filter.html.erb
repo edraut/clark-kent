@@ -1,0 +1,21 @@
+<div class="ih-span one-quarter">
+	<div class="ih-row">
+		<%= filter.label.humanize %>
+	</div>
+	<div class="ih-row">
+		<div class="ih-span">
+		  min<br>
+		  <%= number_field_tag "#{filter.param}_min",
+		            params["#{filter.param}_min"],
+		            class: 'string input-small',
+		            id: "#{filter.param}_min" %>
+		</div>
+		<div class="ih-span">
+		  max<br>
+		  <%= text_field_tag "#{filter.param}_max",
+		          params["#{filter.param}_max"],
+		          class: 'string input-small',
+		          id: "#{filter.param}_max" %>
+		</div>
+	</div>
+</div>

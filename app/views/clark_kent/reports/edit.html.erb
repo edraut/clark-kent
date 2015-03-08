@@ -1,0 +1,21 @@
+<h1> Editing report: <%= @report.name %></h1>
+<%= link_to "&larr; back to report index".html_safe, reports_url %>
+
+
+<div class="ih-row margin-top">
+	<div id="report_info_container">
+		<%= render partial: 'show' %>
+	</div>
+</div>
+
+<% unless @report.new_record? %>
+	<div class="well margin-top ih-row">
+		<%= render partial: '/clark_kent/report_filters/index', locals: {filterable: @report} %>
+	</div>
+	<div class="well margin-top ih-row">
+		<%= render partial: '/clark_kent/report_columns/index' %>
+	</div>
+	<div class="well margin-top ih-row">
+		<%= render partial: '/clark_kent/report_emails/index' %>
+	</div>
+<% end %>

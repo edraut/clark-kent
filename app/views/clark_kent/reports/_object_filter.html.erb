@@ -1,0 +1,15 @@
+<div class="ih-span one-quarter">
+	<div class="ih-row">
+		<%= filter.param.humanize %>
+	</div>
+	<div class="ih-row">
+		<% options = @filter_collections.send(filter.collection) %>
+		<%= select_tag filter.param,
+			options_from_collection_for_select(
+				options,
+				(select_value_method(filter.param,options.first)),
+				(select_text_method(filter.param,options.first)),
+				params[filter.param]), {include_blank: true}.merge((options.length > 25) ? {'data-autocomplete' => true} : {}) %>
+
+	</div>
+</div>

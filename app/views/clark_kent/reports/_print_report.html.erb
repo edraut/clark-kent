@@ -1,0 +1,30 @@
+<% if rows %>
+  <% if rows.total_count > rows.count(:id) %>
+    <%= link_to 'Print',
+                'javascript:void(0)',
+                onclick: "$('#print_report_modal').modal('show');",
+                class: 'btn'
+    %>
+    <div id="print_report_modal" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        &nbsp;
+      </div>
+      <div class="modal-body">
+        <p> You will only be printing the current page of results (50 of <%= @rows.total_count %> total results).
+            To print all results click the <strong>download full csv</strong> link at the bottom of the page.</p>
+        <div class="row-fluid" >
+          <div class="span8"></div>
+          <div class="span1">
+            <%= print_button(@rows, true) %>
+          </div>
+          <div class="span1">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <%= print_button(@rows) %>
+  <% end %>
+<% end %>

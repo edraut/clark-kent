@@ -1,0 +1,40 @@
+<div class="ih-row editing">
+  <%= simple_form_for user_report_email,
+      defaults: {
+        wrapper_html: { class: 'span2'},
+        input_html: { class: 'input-medium' },
+        label_html: { class: 'quiet'}},
+      html: {
+        class: 'form-inline',
+        data: {
+          ajax_form: true,
+          sub_type: "AddALineForm",
+          ajax_target: user_report_email.new_record? ? "#user_report_email_list_#{user_report_email.report_email_id}" : "#user_report_email_#{user_report_email.id}",
+          insert_method: user_report_email.new_record? ? 'append' : 'html',
+          error_target: "#new_user_report_email_container_#{user_report_email.report_email_id}",
+          container: "#new_user_report_email_container_#{user_report_email.report_email_id}",
+          ajax_flash: true }} do |f| %>
+    <div class="ih-span">
+      <%= f.input :report_email_id, as: :hidden %>
+      <% if user_report_email.new_record? %>
+        <%= f.input :email, label: 'email address' %>
+      <% else %>
+        <div class="ih-row"><%= user_report_email.email %></div>
+      <% end %>
+    </div>
+    <div class="ih-span right margin-top">
+      <%= f.button :submit %>
+      <% unless user_report_email.new_record? %>
+        &nbsp; <%= link_to 'cancel', user_report_email_url(user_report_email),
+          data: {
+            ajax_link: "true",
+            ajax_target: "#user_report_email_#{user_report_email.id}" } %>
+        &nbsp; <%= link_to '&otimes;'.html_safe, user_report_email_url(user_report_email),
+          class: "delete",
+          data: {
+            ajax_delete: "true", ajax_target: "#user_report_email_#{user_report_email.id}"},
+          tabindex: "-1" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

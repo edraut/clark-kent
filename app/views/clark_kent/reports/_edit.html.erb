@@ -1,0 +1,47 @@
+<div class="ih-row">
+  <%= simple_form_for @report, html: @report.persisted? ? {
+    data: {
+      ajax_form: true,
+      ajax_target: '#report_info_container' }
+  } : {} do |f| %>
+    <div class="ih-span one-quarter">
+      <%= f.input :name %>
+    </div>
+    <div class="ih-span one-quarter">
+      <%= f.input :resource_type,
+          collection: ClarkKent.resource_options,
+          label: 'A row for every:' %>
+
+    </div>
+    <div class="ih-span one-quarter">
+      <div class="ih-row">sharing</div>
+      <div class="ih-row">
+        <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options,
+          input_html: {data: {revealer: true, sub_type: "FormFieldRevealer", revealer_children_id: "sharing_options"}},
+          label: false, include_blank: false %>
+      </div>
+      <div class="ih-row" data-revealer-target="sharing_options">
+        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id}, wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => ClarkKent.user_class_name, id: "sharing_options_#{ClarkKent.user_class_name}"} %>
+        <% ClarkKent::SharingScopeKind.custom.each do |sharing_scope_kind| %>
+          <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,
+            wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.class_name, id: "sharing_options_#{sharing_scope_kind.class_name}"} %>
+        <% end %>
+        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: ''},
+          wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => "", id: "sharing_options_"} %>
+      </div>
+    </div>
+    <div class="ih-span one-quarter margin-top right">
+      <div class="ih-row">
+        <%= f.button :submit %>
+        <% unless @report.new_record? %>
+            &nbsp; <%= ajax_link 'cancel', report_url(@report), {class: 'right'}, "#report_info_container" %>
+            }
+          </div>
+          <div class="ih-row right">or</div>
+          <div class="ih-row">
+            <%= link_to "Delete Report", @report, class: 'right', :method=>:delete, :data => { delete_link: true, :confirm => "Are you sure you want to delete this report?" } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

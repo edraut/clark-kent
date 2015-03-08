@@ -1,0 +1,34 @@
+<%= simple_form_for report_email,
+    as: report_email,
+    url: report_email.new_record? ? report_emails_url : report_email_url(report_email),
+    defaults: {
+      wrapper_html: { class: 'span2'},
+      input_html: { class: 'input-medium' },
+      label_html: { class: 'quiet'}},
+    html: {
+      class: 'form-inline',
+      data: {
+        ajax_form: true,
+        sub_type: "AddALineForm",
+        ajax_target: report_email.new_record? ? '#report_email_list' : "#report_email_#{report_email.id}",
+        error_target: "new_report_email_container_#{report_email.report_id}",
+        insert_method: report_email.new_record? ? 'append' : 'html',
+        container: "new_report_email_container_#{report_email.report_id}",
+        ajax_flash: true }} do |f| %>
+  <div class="ih-span one-third">
+    <%= f.input :name %>
+  </div>
+  <div class="ih-span one-third">
+    <%= f.input :report_id, as: :hidden %>
+    <%= f.input :when_to_send, collection: ClarkKent::ReportEmail::SEND_TIMES, include_blank: false %>
+  </div>
+  <div class="ih-span one-third right margin-top">
+    <%= f.button :submit %>
+    <% unless report_email.new_record? %>
+      &nbsp; <%= link_to 'cancel', report_email_url(report_email),
+        data: {ajax_link: "true", ajax_target: "#report_email_#{report_email.id}" } %>
+      &nbsp; <%= link_to '&otimes;'.html_safe, report_email_url(report_email), class: "delete", data: {ajax_delete: "true", ajax_target: "#report_email_#{report_email.id}"}, tabindex: "-1" %>
+    <% end %>
+  </div>
+<% end %>
+

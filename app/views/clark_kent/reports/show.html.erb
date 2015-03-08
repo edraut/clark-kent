@@ -1,0 +1,43 @@
+<h1><%= @report.name %></h1>
+<%= link_to "&larr; back to report index".html_safe, reports_url, id: 'report_index' %>
+
+<div class="ih-row margin-top">
+	<form action="<%= report_url(@report) %>" method="get">
+		<% @report.custom_filters.each do |filter| %>
+			<%= render partial: filter.kind, locals: {filter: filter} %>
+		<% end %>
+		<input type="hidden" name="run_report" value="true">
+		<%= button_tag 'Run Report', class: 'btn', style: 'margin-left: 0px' %>
+		<%= render partial: 'print_report', locals: {rows: @rows} %>
+	</form>
+</div>
+<% if @rows %>
+	<div class="ih-row margin-top">
+		<table class="stripey-table">
+			<tr>
+				<% @report.report_columns.sorted.each do |column| %>
+					<th>
+						<%=
+							@report.sortable?(column) ?
+								(link_to column.column_name, request.path + '?' + request.query_parameters.merge(order: "#{column.column_name}-#{get_temp_order_direction(params)}").to_param) :
+								column.column_name.humanize %> <%= get_selected_order_direction(params, column)
+						%>
+					</th>
+				<% end %>
+			</tr>
+			<% @rows.each do |row| %>
+				<tr>
+					<% @report.report_columns.each do |column| %>
+						<td><%= display_for_value(row[column.column_name], column.column_name) %></td>
+					<% end %>
+				</tr>
+			<% end if @rows.present? %>
+		</table>
+	</div>
+	<div class="ih-row margin-top">
+	  <%= paginate @rows %>
+	  <div id="download_link"><%= render partial: 'download_link' %></div>
+	</div>
+<% end %>
+<div class="ih-span">&nbsp;</div>
+

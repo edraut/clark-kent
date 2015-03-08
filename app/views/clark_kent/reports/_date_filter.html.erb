@@ -1,0 +1,23 @@
+<div class="ih-span one-quarter">
+	<div class="ih-row">
+		<%= filter.label.humanize %>
+	</div>
+	<div class="ih-row">
+		<div class="ih-span">
+		  from<br>
+		  <%= text_field_tag "#{filter.param}_from",
+		            params["#{filter.param}_from"],
+		            data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
+		            class: 'string input-small',
+		            id: "#{filter.param}_start_date" %>
+		</div>
+		<div class="ih-span">
+		  to<br>
+		  <%= text_field_tag "#{filter.param}_until",
+		          params["#{filter.param}_until"],
+		          data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
+		          class: 'string input-small',
+		          id: "#{filter.param}_end_date" %>
+		</div>
+	</div>
+</div>

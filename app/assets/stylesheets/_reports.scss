@@ -1,0 +1,67 @@
+table.report {
+	border-collapse:collapse;
+}
+table.report, table.report th, table.report td {
+	border: 1px solid $light-grey;
+}
+table.report th, table.report td {
+	padding: 3px 6px;
+}
+table.report .left{
+	text-align: left;
+}
+
+.tape-view {
+	td {
+		padding: 0;
+		margin: 0;
+	}
+	.report-name-column {
+		padding: 12px;
+	}
+}
+
+.tape-view-intersect-top {
+	width: 49px !important;
+	height:31px !important;
+	margin-bottom: 6px;
+}
+
+.tape-view-intersect-bottom {
+	width: 49px !important;
+	height:31px !important;
+	margin-left: 6px;
+	margin-top: 6px;
+}
+
+.tape-view-available-box,
+.tape-view-reserved-box,
+.tape-view-owner-box,
+.tape-view-maintenance-box,
+.tape-view-owner-guest-box {
+	width: 55px;
+	height: 34px;
+}
+
+.tape-view-reserved-box {
+	background: #b0cf59;
+}
+
+.tape-view-owner-box {
+	background: #73b5e2;
+}
+
+.tape-view-owner-guest-box {
+	background: #F3A626;
+}
+
+.tape-view-maintenance-box {
+	background: #e48e8e;
+}
+.report-name-column {
+	min-width: 175px;
+}
+
+.amount_mismatch {
+	color: red !important;
+}
