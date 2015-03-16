@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount ClarkKent::Engine => "/clark_kent"
+  mount ClarkKent::Engine => "/reports"
 end

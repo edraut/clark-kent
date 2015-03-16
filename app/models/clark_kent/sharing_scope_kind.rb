@@ -17,17 +17,43 @@ module ClarkKent
       self.all.detect{|ssk| klass_name == ssk.class_name}
     end
 
+    def self.has_some(thing)
+      if thing.present?
+        if thing.respond_to? :any?
+          thing.any?
+        else
+          true
+        end
+      else
+        false
+      end
+    end
+
     def self.custom
       all.select{|ssk| ['everyone',ClarkKent.user_class_name.underscore].exclude? ssk.type}
+    end
+
+    def self.custom_for_user(user)
+      custom.select{|ssk| has_some(ssk.associated_containers_for(user)) }
     end
 
     def self.select_options
       return @sharing_scope_options if @sharing_scope_options
       @sharing_scope_options = {}
-      self.all.each do |sharing_scope|
-        @sharing_scope_options[sharing_scope.human_name] = sharing_scope.class_name
+      self.all.each do |sharing_scope_kind|
+        @sharing_scope_options[sharing_scope_kind.human_name] = sharing_scope_kind.class_name
       end
       @sharing_scope_options
+    end
+
+    def self.select_options_for_user(user)
+      sharing_scope_options = {}
+      self.all.each do |sharing_scope_kind|
+        if custom.exclude?(sharing_scope_kind) || has_some(sharing_scope_kind.associated_containers_for(user))
+          sharing_scope_options[sharing_scope_kind.human_name] = sharing_scope_kind.class_name
+        end
+      end
+      sharing_scope_options
     end
 
     def initialize(class_name,user_association = nil)
@@ -63,8 +89,16 @@ module ClarkKent
       when ClarkKent.user_class_name.underscore
         [ClarkKent::SharingScope.new(user,self)]
       else
-        associated_containers_for(user).map do |associated_container|
-          ClarkKent::SharingScope.new(associated_container,self)
+        if associated_containers_for(user).respond_to? :map
+          associated_containers_for(user).map do |associated_container|
+            ClarkKent::SharingScope.new(associated_container,self)
+          end
+        else
+          if associated_containers_for(user).present?
+            [ClarkKent::SharingScope.new(associated_containers_for(user),self)]
+          else
+            []
+          end
         end
       end
     end

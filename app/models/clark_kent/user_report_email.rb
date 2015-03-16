@@ -1,14 +1,12 @@
 module ClarkKent
 	class UserReportEmail < ActiveRecord::Base
-		belongs_to :user
+		belongs_to :user, class_name: ClarkKent.user_class_name
 		belongs_to :report_email
-
-		attr_accessible :email, :report_email_id
 
 	  validates_with UserEmailValidator
 
 		def email=(address)
-			self.user = User.where("lower(users.email) = lower(:email)",email: address).first
+			self.user = ClarkKent.user_class.where("lower(#{ClarkKent.user_class_name.underscore.pluralize}.email) = lower(:email)",email: address).first
 			self.errors.add(:email, "Couldn't find a user with that email addres") unless self.user.present?
 		end
 

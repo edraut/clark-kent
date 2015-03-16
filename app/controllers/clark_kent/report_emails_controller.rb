@@ -8,7 +8,7 @@ class ClarkKent::ReportEmailsController < ClarkKent::ApplicationController
   end
 
   def create
-    @report_email = ClarkKent::ReportEmail.new(params[:report_email])
+    @report_email = ClarkKent::ReportEmail.new(report_email_params)
     @report_email.save
     render partial: 'edit', locals: {report_email: @report_email}
   end
@@ -22,7 +22,7 @@ class ClarkKent::ReportEmailsController < ClarkKent::ApplicationController
   end
 
   def update
-    @report_email.update_attributes(params[:report_email])
+    @report_email.update_attributes(report_email_params)
     @ajax_flash = {notice: "Your changes were saved."}
     render partial: 'show', locals: {report_email: @report_email}
   end
@@ -39,9 +39,13 @@ class ClarkKent::ReportEmailsController < ClarkKent::ApplicationController
 
   def prepare_report
     report_id = params[:report_id]
-    report_id ||= params[:report_email][:report_id] if params[:report_email]
+    report_id ||= report_email_params[:report_id] if params[:report_email]
     @report = ClarkKent::Report.find(report_id) if report_id
     @report ||= @report_email.report if @report_email
+  end
+
+  def report_email_params
+    params[:report_email].permit(:report_id, :when_to_send, :name)
   end
 
 end

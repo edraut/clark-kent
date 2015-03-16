@@ -8,5 +8,7 @@ class CreateClarkKentReports < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :clark_kent_reports, :sharing_scope_type
+    add_index :clark_kent_reports, :sharing_scope_id
   end
 end

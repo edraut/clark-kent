@@ -20,8 +20,6 @@ module ClarkKent
 
     before_save :handle_filter_value
 
-    attr_accessible :kind_of_day, :offset, :duration
-
     def filter_match_params
       [[self.begin_param_name,self.begin_date],[self.end_param_name,self.end_date]]
     end

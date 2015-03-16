@@ -8,7 +8,7 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
   end
 
   def create
-    @report_column = ClarkKent::ReportColumn.new(params[:report_column])
+    @report_column = ClarkKent::ReportColumn.new(report_column_params)
     @report_column.save
     render partial: 'show_wrapper', locals: {report_column: @report_column}
   end
@@ -22,7 +22,7 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
   end
 
   def update
-    @report_column.update_attributes(params[:report_column])
+    @report_column.update_attributes(report_column_params)
     @ajax_flash = {notice: "Your changes were saved."}
     render partial: 'show', locals: {report_column: @report_column}
   end
@@ -39,9 +39,12 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
 
   def prepare_report
     report_id = params[:report_id]
-    report_id ||= params[:report_column][:report_id] if params[:report_column]
+    report_id ||= report_column_params[:report_id] if params[:report_column]
     @report = ClarkKent::Report.find(report_id) if report_id
     @report ||= @report_column.report if @report_column
   end
 
+  def report_column_params
+    params[:report_column].permit(:report_id, :column_name, :column_order, :report_sort, :summary_method)
+  end
 end

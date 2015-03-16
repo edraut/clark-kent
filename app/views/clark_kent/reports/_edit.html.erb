@@ -16,15 +16,19 @@
     <div class="ih-span one-quarter">
       <div class="ih-row">sharing</div>
       <div class="ih-row">
-        <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options,
+        <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options_for_user(current_user),
           input_html: {data: {revealer: true, sub_type: "FormFieldRevealer", revealer_children_id: "sharing_options"}},
           label: false, include_blank: false %>
       </div>
       <div class="ih-row" data-revealer-target="sharing_options">
         <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id}, wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => ClarkKent.user_class_name, id: "sharing_options_#{ClarkKent.user_class_name}"} %>
-        <% ClarkKent::SharingScopeKind.custom.each do |sharing_scope_kind| %>
-          <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,
-            wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.class_name, id: "sharing_options_#{sharing_scope_kind.class_name}"} %>
+        <% ClarkKent::SharingScopeKind.custom_for_user(current_user).each do |sharing_scope_kind| %>
+          <% if sharing_scope_kind.associated_containers_for(current_user).respond_to? :each %>
+            <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,
+              wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.class_name, id: "sharing_options_#{sharing_scope_kind.class_name}"} %>
+          <% else %>
+            <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: sharing_scope_kind.associated_containers_for(current_user).id}, wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.associated_containers_for(current_user).class.name, id: "sharing_options_#{sharing_scope_kind.associated_containers_for(current_user).class.name}"} %>
+          <% end %>
         <% end %>
         <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: ''},
           wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => "", id: "sharing_options_"} %>

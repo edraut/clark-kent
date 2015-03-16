@@ -1,9 +1,9 @@
 module ClarkKent
 	class ReportColumn < ActiveRecord::Base
-	  include Cloneable
+	  include ClarkKent::Cloneable
 
 		SummaryMethods = ['total','average']
-		attr_accessible :report_id, :column_name, :column_order, :report_sort, :summary_method
+
 		belongs_to :report
 
 		scope :sorted, -> { order("clark_kent_report_columns.column_order") }
@@ -14,11 +14,38 @@ module ClarkKent
 
 		def calculate_summary(values)
 			return nil unless self.summary_method.present?
-			values.send self.summary_method
+			calculator.new(values).calculate
 		end
 
 		def summarizable?
-			report.column_options_for(self.column_name).respond_to? :summarizable
+			report.column_options_for(self.column_name).summarizable
 		end
+
+		def calculator
+			('ClarkKent::' + summary_method.camelcase + 'Calculator').constantize
+		end
+
+	end
+
+	class AbstractCalculator
+    def initialize values
+    	@values = values
+    end
+	end
+
+	class TotalCalculator < AbstractCalculator
+    def calculate
+    	@values.sum
+    end
+	end
+
+	class AverageCalculator < AbstractCalculator
+    def calculate
+    	if @values.length < 1
+        return nil
+      else
+        return (@values.sum.to_f / @values.length)
+      end
+    end
 	end
 end

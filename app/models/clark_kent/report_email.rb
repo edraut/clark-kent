@@ -1,6 +1,6 @@
 module ClarkKent
   class ReportEmail < ActiveRecord::Base
-    include Cloneable
+    include ClarkKent::Cloneable
 
     SEND_TIMES = {
       'Mondays' => 'Monday',
@@ -19,7 +19,6 @@ module ClarkKent
     has_many :user_report_emails, dependent: :destroy
     has_many :users, through: :user_report_emails
 
-    attr_accessible :report_id, :when_to_send, :name
 
     def self.send_emails_for_today
       today = Date.ih_today

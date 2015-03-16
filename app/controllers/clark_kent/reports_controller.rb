@@ -1,7 +1,7 @@
 class ClarkKent::ReportsController < ClarkKent::ApplicationController
   require 'csv'
   respond_to :html, :csv
-  before_filter :prepare_filters
+  before_filter :get_these_params, :prepare_filters
 
   def set_manage_tab
     @manage_tab = 'reports'
@@ -15,7 +15,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
   end
 
   def create
-    @report = ClarkKent::Report.new(params[:report])
+    @report = ClarkKent::Report.new(report_params)
     @report.save
     render action: :edit
   end
@@ -25,20 +25,25 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     if request.xhr?
       render partial: 'show'
     else
-      prepare_params
+      prepare_params if defined? prepare_params
       if params[:run_report].present?
         @these_params[:page] = params[:page]
         @these_params[:per] = @report.resource_class.default_per_page
-        query = @report.get_query(@these_params)
-        @rows = query.page(params[:page])
-        @rows.push @report.summary_row(@rows) if @report.summary_row?
+        begin
+          query = @report.get_query(@these_params)
+        rescue ClarkKent::ReportFilterError => e
+          @errors = e.message
+        else
+          @rows = query.page(params[:page])
+          @rows.push @report.summary_row(@rows) if @report.summary_row?
+        end
       end
     end
   end
 
   def download_link
     @report = ClarkKent::Report.where(id: params[:id]).first
-    prepare_params
+    prepare_params if defined? prepare_params
     @report_result_name = "report-#{@report.id}-#{Time.now.to_formatted_s(:number)}"
     @these_params[:report_result_name] = @report_result_name
     ConeyIsland.submit(ClarkKent::Report,
@@ -58,7 +63,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def update
     @report = ClarkKent::Report.find(params[:id])
-    @report.update_attributes(params[:report])
+    @report.update_attributes(report_params)
     render partial: 'show'
   end
 
@@ -75,5 +80,13 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
   end
 
   protected
+
+  def get_these_params
+    @these_params ||= params
+  end
+
+  def report_params
+    params.require(:report).permit(:name, :resource_type, :sharing_scope_id, :sharing_scope_type)
+  end
 
 end

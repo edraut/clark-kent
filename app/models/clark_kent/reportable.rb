@@ -15,7 +15,22 @@ module ClarkKent
 	      query
 	    end
 
+	    def required_date_params
+	    	self::REPORT_FILTER_OPTIONS.select{|rfo| rfo.in_required_date_group}.map{|rfo| rfo.filter_params}.flatten
+	    end
+
+	    def validate_params(params,report)
+	    	if required_date_params.any?
+	    		missing_params = required_date_params - params.select{|k,v| v.present? }.keys
+	    		# a bit clunky, it only requires any 2 date filters. It would be better to require at least one pair of before/after filters
+	    		if missing_params.length > (required_date_params.length - 2)
+			    	raise ClarkKent::ReportFilterError.new("At least one date range is required.")
+			    end
+			  end
+	    end
+
 		  def report(params,report,count = false)
+		  	validate_params(params, report)
 		  	@selects = []
 		  	@includes = []
 		  	@joins = []
@@ -48,9 +63,9 @@ module ClarkKent
 		    end
 		    query = self.all
 		    if @report_email and @report_email.is_a? ClarkKent::ReportEmail
-					params = @report_email.report_filter_params.symbolize_keys!.merge(params)
+					params = @report_email.report_filter_params.symbolize_keys!.merge(params.symbolize_keys)
 		    else
-					params = report.report_filter_params.symbolize_keys!.merge(params)
+					params = report.report_filter_params.symbolize_keys!.merge(params.symbolize_keys)
 				end
 		    params.each do |param_type,param_value|
 		      if param_value.present?
@@ -121,8 +136,18 @@ module ClarkKent
 		  	where("#{self.table_name}.#{field_name.to_s.sub(/_from/,'')} >= :date_limit", date_limit: match_value)
 		  end
 
+		  def above_number_arel(query, field_name, match_value)
+		  	query.
+		  	where("#{self.table_name}.#{field_name.to_s.sub(/_above/,'')} >= :lower_limit", lower_limit: match_value)
+		  end
+
+		  def below_number_arel(query, field_name, match_value)
+		  	query.
+		  	where("#{self.table_name}.#{field_name.to_s.sub(/_below/,'')} <= :upper_limit", upper_limit: match_value)
+		  end
+
 		  def order_arel(query, field_name, match_value)
-		  	if match_value.is_a? Map
+		  	if match_value.is_a? ClarkKent::ReportSort
 			  	order_column = match_value.order_column
 			  	order_direction = match_value.order_direction
 			  else

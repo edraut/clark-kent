@@ -8,7 +8,7 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
   end
 
   def create
-    @user_report_email = ClarkKent::UserReportEmail.new(params[:user_report_email])
+    @user_report_email = ClarkKent::UserReportEmail.new(user_report_email_params)
     if @user_report_email.save
       render partial: 'show_wrapper', locals: {user_report_email: @user_report_email}
     else
@@ -25,7 +25,7 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
   end
 
   def update
-    @user_report_email.update_attributes(params[:user_report_email])
+    @user_report_email.update_attributes(user_report_email_params)
     @ajax_flash = {notice: "Your changes were saved."}
     render partial: 'show', locals: {user_report_email: @user_report_email}
   end
@@ -41,7 +41,7 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
 
   def prepare_report_email
     report_email_id = params[:report_email_id]
-    report_email_id ||= params[:user_report_email][:report_email_id] if params[:user_report_email]
+    report_email_id ||= user_report_email_params[:report_email_id] if params[:user_report_email]
     @report_email = ClarkKent::ReportEmail.find(report_email_id) if report_email_id
     @report_email ||= @user_report_email.report_email if @user_report_email
   end
@@ -49,5 +49,9 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
   protected
   def authorize_user!
     authorize! :manage, :reports
+  end
+
+  def user_report_email_params
+    params[:user_report_email].permit(:user_id, :report_email_id, :email)
   end
 end

@@ -18,6 +18,10 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", ">= 4.1.0"
+  s.add_dependency "simple_form"
+  s.add_dependency "kaminari"
+  s.add_dependency "thin_man"
 
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "minitest"
 end

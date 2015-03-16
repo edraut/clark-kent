@@ -1,8 +1,5 @@
 module ClarkKent
   class ReportNumberFilter < ReportFilter
-    include Cloneable
-
-  	attr_accessible :max_value, :min_value
 
     def filter_match_params
       [[self.min_param_name,self.min_value],[self.max_param_name,self.max_value]]

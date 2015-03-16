@@ -27,7 +27,7 @@
     </div>
     <div class="ih-span one-fifth">
       <% if !report_column.new_record? and report_column.summarizable? %>
-        <%= f.input :summary_method, collection: ReportColumn::SummaryMethods %>
+        <%= f.input :summary_method, collection: ClarkKent::ReportColumn::SummaryMethods %>
       <% else %>
         &nbsp;
       <% end %>

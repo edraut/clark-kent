@@ -1,6 +1,6 @@
 class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
   before_filter :prepare_report_filter
-  before_filter :prepare_report, :prepare_role, :prepare_filters
+  before_filter :prepare_report, :prepare_filters
 
   def new
     @report_filter = ClarkKent::ReportFilter.new(filterable_id: @filterable.id, filterable_type: @filterable.class.name)
@@ -8,8 +8,8 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
   end
 
   def create
-    report_filter_class = @filterable.get_filter_class(params[:report_filter])
-    @report_filter = report_filter_class.new(params[:report_filter])
+    report_filter_class = @filterable.get_filter_class(report_filter_params)
+    @report_filter = report_filter_class.new(report_filter_params)
     @report_filter.save
     render partial: 'show_wrapper', locals: {report_filter: @report_filter}
   end
@@ -23,7 +23,7 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
   end
 
   def update
-    @report_filter.update_attributes(params[@report_filter.class.name.underscore])
+    @report_filter.update_attributes(report_filter_params)
     @ajax_flash = {notice: "Your changes were saved."}
     render partial: 'show', locals: {report_filter: @report_filter}
   end
@@ -48,4 +48,12 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
     @filterable ||= @report_filter.filterable if @report_filter
   end
 
+  def report_filter_params
+    if @report_filter
+      these_params = params[@report_filter.class.name.underscore]
+    else
+      these_params = params[:report_filter]
+    end
+    these_params.permit(:filterable_id, :filterable_type, :string, :filter_name, :filter_value, :type, :duration, :kind_of_day, :offset)
+  end
 end

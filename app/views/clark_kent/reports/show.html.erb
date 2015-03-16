@@ -1,6 +1,11 @@
 <h1><%= @report.name %></h1>
 <%= link_to "&larr; back to report index".html_safe, reports_url, id: 'report_index' %>
 
+<% if @errors %>
+	<div class="error">
+		<%= @errors %>
+	</div>
+<% end %>
 <div class="ih-row margin-top">
 	<form action="<%= report_url(@report) %>" method="get">
 		<% @report.custom_filters.each do |filter| %>

@@ -1,16 +1,18 @@
 require "clark_kent/engine"
+require 'simple_form'
+require 'thin_man'
 
 module ClarkKent
   mattr_accessor  :resource_options, :user_class_name, :other_sharing_scopes, :base_controller,
                   :custom_report_links
 
   def self.config(options)
-    @@resource_options = options[:resource_options]
+    @@resource_options = options[:resource_options].map{|option_hash| ClarkKent::ResourceOption.new option_hash}
     @@user_class_name = options[:user_class_name]
     @@other_sharing_scopes = options[:other_sharing_scopes]
     base_controller_name = options[:base_controller_name]
     @@base_controller = base_controller_name.constantize
-    @@custom_report_links = options[:custom_report_links]
+    @@custom_report_links = options[:custom_report_links] || []
   end
 
   def self.user_class
