@@ -16,12 +16,12 @@ module ClarkKent
 	    end
 
 	    def required_date_params
-	    	self::REPORT_FILTER_OPTIONS.select{|rfo| rfo.in_required_date_group}.map{|rfo| rfo.filter_params}.flatten
+	    	self::REPORT_FILTER_OPTIONS.select{|rfo| rfo.in_required_date_group}.map{|rfo| rfo.filter_params}.flatten.map(&:to_sym)
 	    end
 
 	    def validate_params(params,report)
 	    	if required_date_params.any?
-	    		missing_params = required_date_params - params.select{|k,v| v.present? }.keys
+	    		missing_params = required_date_params - params.select{|k,v| v.present? }.symbolize_keys.keys
 	    		# a bit clunky, it only requires any 2 date filters. It would be better to require at least one pair of before/after filters
 	    		if missing_params.length > (required_date_params.length - 2)
 			    	raise ClarkKent::ReportFilterError.new("At least one date range is required.")
@@ -30,7 +30,6 @@ module ClarkKent
 	    end
 
 		  def report(params,report,count = false)
-		  	validate_params(params, report)
 		  	@selects = []
 		  	@includes = []
 		  	@joins = []
@@ -67,6 +66,7 @@ module ClarkKent
 		    else
 					params = report.report_filter_params.symbolize_keys!.merge(params.symbolize_keys)
 				end
+		  	validate_params(params, report)
 		    params.each do |param_type,param_value|
 		      if param_value.present?
 	          arel_method_name = self.arel_method_for(param_type)

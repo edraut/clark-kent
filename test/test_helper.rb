@@ -16,3 +16,6 @@ Rails.backtrace_cleaner.remove_silencers!
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+class ActiveSupport::TestCase
+  extend MiniTest::Spec::DSL
+end

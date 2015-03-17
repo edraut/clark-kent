@@ -19,7 +19,6 @@ module ClarkKent
     has_many :user_report_emails, dependent: :destroy
     has_many :users, through: :user_report_emails
 
-
     def self.send_emails_for_today
       today = Date.ih_today
       todays_filters = []
@@ -44,7 +43,11 @@ module ClarkKent
       SharingScopeKind.custom.each do |sharing_scope_kind|
         unless report.report_filters.map(&:filter_name).include? sharing_scope_kind.basic_association_id_collection_name.to_s
           associations = sharing_scope_kind.associated_containers_for(user)
-          params[sharing_scope_kind.basic_association_id_collection_name] = associations.map(&:id)
+          if associations.respond_to? :map
+            params[sharing_scope_kind.basic_association_id_collection_name] = associations.map(&:id)
+          else
+            params[sharing_scope_kind.basic_association_id_collection_name] = associations.id
+          end
         end
       end
       report_download_url = ClarkKent::Report.send_report_to_s3(self.id, params)

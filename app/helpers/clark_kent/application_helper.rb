@@ -34,7 +34,8 @@ module ClarkKent
     end
 
     def display_for_value(value, column_name=nil)
-      return link_to(value, edit_manage_reservation_path(value)) if column_name == 'reservation_id'
+      ##TODO, genericize this link display. link info must come from model config.
+      return link_to(value, main_app.edit_manage_reservation_path(value)) if column_name == 'reservation_id'
       return value.join(', ') if value.is_a? Array
       return value.to_formatted_s(:datepicker) if value.is_a? Date
       return number_to_currency(value) if value.is_a? Float or value.is_a? BigDecimal or is_decimal?(value)

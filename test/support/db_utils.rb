@@ -9,7 +9,8 @@ def setup_db
   report.report_columns.create(column_name: 'id', column_order: 2)
   report.report_columns.create(column_name: 'amount', column_order: 3)
   report.report_columns.create(column_name: 'description', column_order: 4)
-  u = User.create(name: 'Michael Hedges', email: 'taproot@gmail.com')
+  d = Department.create(name: 'silly walks')
+  u = User.create(name: 'Michael Hedges', email: 'taproot@gmail.com', department_id: d.id)
   Order.create(user_id: u.id, description: 'Guitar strings', amount: 1)
 end
 

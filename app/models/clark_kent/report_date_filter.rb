@@ -33,7 +33,7 @@ module ClarkKent
     end
 
     def begin_date
-      @begin_date = Date.ih_today
+      @begin_date = Date.today
       direction, period = self.period_offset
       @begin_date = @begin_date.send(direction, 1.send(period)) if direction
       @begin_date = @begin_date.find_day(self.day_offset) if self.day_offset

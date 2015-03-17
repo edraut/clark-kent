@@ -1,6 +1,7 @@
 require "clark_kent/engine"
 require 'simple_form'
 require 'thin_man'
+require 'aws-sdk'
 
 module ClarkKent
   mattr_accessor  :resource_options, :user_class_name, :other_sharing_scopes, :base_controller,
@@ -19,4 +20,16 @@ module ClarkKent
     @@user_class = @@user_class_name.constantize
   end
 
+end
+
+class Date
+  def find_day(day_name)
+    if Date::DAYNAMES.include?(day_name.capitalize)
+      week_start = self if [0,7].include? self.wday
+      week_start ||= (self.beginning_of_week - 1.day)
+      week_start + Date::DAYNAMES.index(day_name.capitalize)
+    else
+      self.send(day_name)
+    end
+  end
 end
