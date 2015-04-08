@@ -1,0 +1,44 @@
+@media print {
+  header {
+    display:none
+  }
+
+  form {
+    display:none
+  }
+
+  body, .container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  a[href]:after { display:none; }
+
+  title {
+    display: none
+  }
+
+  @page {
+    size: landscape;
+    margin-left:1cm;
+    margin-right:1cm;
+    margin-bottom:1cm;
+  }
+
+  .ih-row {
+    overflow: visible;
+  }
+
+  #download_link {
+    display: none;
+  }
+
+  nav {
+    display: none;
+  }
+
+  #report_index {
+    display: none;
+  }
+}
