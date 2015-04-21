@@ -30,7 +30,7 @@ module ClarkKent
     end
 
     def self.custom
-      all.select{|ssk| ['everyone',ClarkKent.user_class_name.underscore].exclude? ssk.type}
+      all.select{|ssk| ['everyone','personal'].exclude? ssk.type}
     end
 
     def self.custom_for_user(user)
@@ -49,7 +49,10 @@ module ClarkKent
     def self.select_options_for_user(user)
       sharing_scope_options = {}
       self.all.each do |sharing_scope_kind|
+        puts sharing_scope_kind.to_yaml
         if custom.exclude?(sharing_scope_kind) || has_some(sharing_scope_kind.associated_containers_for(user))
+          puts sharing_scope_kind.class_name
+          puts sharing_scope_kind.human_name
           sharing_scope_options[sharing_scope_kind.human_name] = sharing_scope_kind.class_name
         end
       end
@@ -67,7 +70,14 @@ module ClarkKent
     end
 
     def human_name
-      @human_name ||= @class_name.humanize
+      return @human_name if @human_name.present?
+      if @class_name == ClarkKent.user_class_name
+        @human_name = 'Personal'
+      else
+        @human_name = @class_name.humanize
+      end
+      puts @human_name
+      @human_name
     end
 
     def type
@@ -86,7 +96,7 @@ module ClarkKent
       case type
       when 'everyone'
         [ClarkKent::SharingScope.new('Everyone',self)]
-      when ClarkKent.user_class_name.underscore
+      when 'personal'
         [ClarkKent::SharingScope.new(user,self)]
       else
         if associated_containers_for(user).respond_to? :map
