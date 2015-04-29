@@ -1,6 +1,6 @@
 <h1><%= @report.name %></h1>
 <%= link_to "&larr; back to report index".html_safe, reports_url, id: 'report_index' %>
-
+<%= controller_name %>
 <% if @errors %>
 	<div class="error">
 		<%= @errors %>
@@ -33,7 +33,7 @@
 			<% @rows.each do |row| %>
 				<tr>
 					<% @report.report_columns.each do |column| %>
-						<td><%= display_for_value(row[column.column_name], column.column_name) %></td>
+						<td><%= display_for_value(row[column.column_name], column) %></td>
 					<% end %>
 				</tr>
 			<% end if @rows.present? %>

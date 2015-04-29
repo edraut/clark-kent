@@ -20,7 +20,6 @@ module ClarkKent
     validates :sharing_scope_id, presence: true, if: ->(r) { r.sharing_scope_type.present? }
 
     def self.send_report_to_s3(report_id, params)
-      params = params
       report_class = params['report_class'].constantize if params['report_class']
       report_class ||= ::ClarkKent::Report
       reportable = report_class.find(report_id)
@@ -114,35 +113,35 @@ module ClarkKent
     def arel_includes
       self.report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
-        column_info.includes if column_info.respond_to? :includes
+        column_info.includes
         }.compact
     end
 
     def arel_joins
       self.report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
-        column_info.joins if column_info.respond_to? :joins
+        column_info.joins
         }.compact
     end
 
     def extra_scopes
       self.report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
-        column_info.extra_scopes if column_info.respond_to? :extra_scopes
+        column_info.extra_scopes
         }.flatten.compact
     end
 
     def extra_filters
       self.report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
-        column_info.where if column_info.respond_to? :where
+        column_info.where
         }.flatten.compact
     end
 
     def groups
       self.report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
-        column_info.group if column_info.respond_to? :group
+        column_info.group
         }.flatten.compact
     end
 
@@ -158,27 +157,30 @@ module ClarkKent
       @selects = []
       self.report_columns.each do |report_column|
         column_option = self.column_options_for(report_column.column_name)
-        @selects.push column_option.custom_select if column_option.respond_to? :custom_select
+        @selects.push column_option.custom_select
       end
       self.report_filters.each do |report_filter|
-        column_option = self.column_options_for(report_filter.filter_name)
-        @selects.push column_option.custom_select if column_option.respond_to? :custom_select
+        column_option = self.column_options_for(report_filter.filter_name.to_sym)
+        @selects.push column_option.custom_select if column_option.present?
       end
       @selects
     end
-
 
     def filter_options_for(filter_name)
       self.resource_class::REPORT_FILTER_OPTIONS.detect{|filter| filter.param == filter_name}
     end
 
+    def column_options
+      @column_options ||= self.resource_class::REPORT_COLUMN_OPTIONS
+    end
+
     def column_options_for(column_name)
-      if self.resource_class::REPORT_COLUMN_OPTIONS.has_key? column_name.to_sym
-        self.resource_class::REPORT_COLUMN_OPTIONS[column_name.to_sym]
+      if column_options.any?{|co| co.name == column_name.to_sym}
+        column_options.detect{|co| co.name == column_name.to_sym}
       else
         column_name = column_name.to_s.split('_')[0..-2].join('_')
-        if self.resource_class::REPORT_COLUMN_OPTIONS.has_key? column_name.to_sym
-          self.resource_class::REPORT_COLUMN_OPTIONS[column_name.to_sym]
+        if column_options.any?{|co| co.name ==  column_name.to_sym}
+          column_options.detect{|co| co.name == column_name.to_sym}
         end
       end
     end
@@ -220,11 +222,11 @@ module ClarkKent
     ## This is the set of columns not chosed to use in the report. These are the ones available to add
     ## when updating a report.
     def available_columns
-      self.resource_class::REPORT_COLUMN_OPTIONS.keys.reject{|column| self.report_columns.pluck(:column_name).include? column.to_s}
+      column_options.reject{|column| self.report_columns.pluck(:column_name).include? column.name.to_s}
     end
 
     def sortable?(column)
-      !!(self.column_options_for(column.column_name).respond_to? :order_sql)
+      self.column_options_for(column.column_name).order_sql.present?
     end
 
     def sharing_scope_pretty

@@ -1,1 +1,1 @@
-<%= f.input :filter_value, collection: @filter_collections.send(report_filter.filterable.collection_for(name)) %>
+<%= f.input :filter_value, collection: collection_for(report_filter, name) %>

@@ -72,16 +72,17 @@ module ClarkKent
 	          arel_method_name = self.arel_method_for(param_type)
 		        if arel_method_name.present?
 		          query = self.send(arel_method_name, query, param_type, param_value)
-		          report_column_options = report.column_options_for(param_type)
-		          if(report_column_options.respond_to? :joins) && (@joins.exclude? report_column_options.joins)
-		          	@joins.push report_column_options.joins
-		          end
-							if(report_column_options.respond_to? :includes) && (@includes.exclude? report_column_options.includes)
-								@includes.push report_column_options.includes
-		          end
-		          if (count == false) && (report_column_options.respond_to? :custom_select) && (@selects.exclude? report_column_options.custom_select)
-		          	@selects.push report_column_options.custom_select
-		          end
+		          if report_column_options = column_options_for(param_type)
+			          if(report_column_options.joins.present?) && (@joins.exclude? report_column_options.joins)
+			          	@joins.push report_column_options.joins
+			          end
+								if(report_column_options.includes.present?) && (@includes.exclude? report_column_options.includes)
+									@includes.push report_column_options.includes
+			          end
+			          if (count == false) && (report_column_options.custom_select.present?) && (@selects.exclude? report_column_options.custom_select)
+			          	@selects.push report_column_options.custom_select
+			          end
+			        end
 		        end
 		      end
 		    end
@@ -113,6 +114,10 @@ module ClarkKent
 					return query
 				end
 
+		  end
+
+		  def column_options_for(column_name)
+				self::REPORT_COLUMN_OPTIONS.detect{|co| column_name == co.name}
 		  end
 
 		  def arel_method_for(param_type)
@@ -153,7 +158,7 @@ module ClarkKent
 			  else
 			  	order_column, order_direction = match_value.split('-')
 			  end
-				column_info = self::REPORT_COLUMN_OPTIONS[order_column.to_sym]
+				column_info = column_options_for(order_column.to_sym)
 				if column_info.respond_to? :order_sql
 				  order_sql = column_info.order_sql
 			  	order_sql = "#{order_sql} #{order_direction}"

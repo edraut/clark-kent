@@ -23,17 +23,17 @@ module Reporting
     ]
 
     # These are the available column options for building reports from this resource
-    REPORT_COLUMN_OPTIONS ||= {
-      user_name: column_config(
+    REPORT_COLUMN_OPTIONS ||= [
+      column_config(name: :user_name,
         custom_select: "
         (SELECT u.name
           FROM users u
           WHERE u.id = orders.user_id)
         as user_name"),
-      id: column_config(order_sql: 'orders.id'),
-      amount: column_config(order_sql: 'orders.amount', summarizable: true),
-      description: column_config(order_sql: 'orders.description')
-    }
+      column_config(name: :id, order_sql: 'orders.id', link: :order_path),
+      column_config(name: :amount, order_sql: 'orders.amount', summarizable: true),
+      column_config(name: :description, order_sql: 'orders.description')
+    ]
 
     def self.included(base)
       base.extend ClassMethods

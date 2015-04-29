@@ -33,9 +33,9 @@ module ClarkKent
       (value =~ /\d/) && (value =~ /\./) && !(value =~ /[a-zA-Z]/)
     end
 
-    def display_for_value(value, column_name=nil)
+    def display_for_value(value, column=nil)
       ##TODO, genericize this link display. link info must come from model config.
-      return link_to(value, main_app.edit_manage_reservation_path(value)) if column_name == 'reservation_id'
+      return link_to(value, main_app.send(column.link, id: value)) if column.try(:link) && value.present?
       return value.join(', ') if value.is_a? Array
       return value.to_formatted_s(:datepicker) if value.is_a? Date
       return number_to_currency(value) if value.is_a? Float or value.is_a? BigDecimal or is_decimal?(value)
@@ -65,6 +65,14 @@ module ClarkKent
                 'javascript:void(0)',
                 class: 'btn',
                 onclick: raw(onclick_str)
+      end
+    end
+
+    def collection_for(report_filter,name)
+      if report_filter.filterable.collection_for(name).is_a? Symbol
+        @filter_collections.send(report_filter.filterable.collection_for(name))
+      else
+        report_filter.filterable.collection_for(name)
       end
     end
   end

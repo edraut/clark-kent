@@ -49,10 +49,7 @@ module ClarkKent
     def self.select_options_for_user(user)
       sharing_scope_options = {}
       self.all.each do |sharing_scope_kind|
-        puts sharing_scope_kind.to_yaml
         if custom.exclude?(sharing_scope_kind) || has_some(sharing_scope_kind.associated_containers_for(user))
-          puts sharing_scope_kind.class_name
-          puts sharing_scope_kind.human_name
           sharing_scope_options[sharing_scope_kind.human_name] = sharing_scope_kind.class_name
         end
       end
@@ -76,7 +73,6 @@ module ClarkKent
       else
         @human_name = @class_name.humanize
       end
-      puts @human_name
       @human_name
     end
 

@@ -18,13 +18,20 @@ module ClarkKent
 		end
 
 		def summarizable?
-			report.column_options_for(self.column_name).summarizable
+			report.column_options_for(self.column_name.to_sym).summarizable
 		end
 
 		def calculator
 			('ClarkKent::' + summary_method.camelcase + 'Calculator').constantize
 		end
 
+    def name
+      column_name
+    end
+
+    def link
+      report.column_options_for(self.name.to_sym).link
+    end
 	end
 
 	class AbstractCalculator

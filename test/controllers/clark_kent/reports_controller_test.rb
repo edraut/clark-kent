@@ -39,6 +39,7 @@ module ClarkKent
     test "should show report results" do
       get :show, id: @report, current_user_id: @current_user.id, run_report: true, created_at_until: Date.today, created_at_from: Date.yesterday
       assert_response :success
+      assert_not_nil assigns(:rows)
       @response.body.must_match 'Guitar strings'
     end
 

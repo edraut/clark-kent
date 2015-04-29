@@ -50,7 +50,7 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
 
   def report_filter_params
     if @report_filter
-      these_params = params[@report_filter.class.name.underscore]
+      these_params = params[@report_filter.class.name.underscore.gsub(/.*\//,'')]
     else
       these_params = params[:report_filter]
     end
