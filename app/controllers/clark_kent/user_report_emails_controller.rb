@@ -47,9 +47,6 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
   end
 
   protected
-  def authorize_user!
-    authorize! :manage, :reports
-  end
 
   def user_report_email_params
     params[:user_report_email].permit(:user_id, :report_email_id, :email)
