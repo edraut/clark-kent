@@ -92,6 +92,9 @@ module ClarkKent
 			    	query = query.select(selectable)
 			    end
 			  end
+			  if self.respond_to? :clark_kent_required_filters
+			  	query = self.send(:clark_kent_required_filters, query)
+			  end
 	    	@includes.uniq.each do |includeable|
 		    	query = query.includes(includeable)
 		    end if @includes.any?

@@ -48,6 +48,10 @@ module Reporting
           where(users: {email: match_value})
       end
 
+      def clark_kent_required_filters(query)
+        query = query.where("orders.user_id > 0")
+      end
+
     end # ClassMethods
 
   end
