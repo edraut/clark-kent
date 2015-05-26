@@ -110,7 +110,6 @@ module ClarkKent
 	    	@groups.uniq.each do |grouper|
 		    	query = query.group(grouper)
 		    end if @groups.any?
-
 		    if count == true
 		    	return query.count
 				else

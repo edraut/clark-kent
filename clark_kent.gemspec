@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "simple_form"
   s.add_dependency "kaminari"
   s.add_dependency "thin_man"
+  s.add_dependency "foreign_office"
   s.add_dependency 'aws-sdk', '1.49.0'
 
   s.add_development_dependency "sqlite3"
