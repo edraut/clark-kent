@@ -161,7 +161,7 @@ module ClarkKent
       end
       self.report_filters.each do |report_filter|
         column_option = self.column_options_for(report_filter.filter_name.to_sym)
-        @selects.push column_option.custom_select if column_option.present?
+        @selects.push column_option.custom_select if column_option.present? && column_option.custom_select.present?
       end
       @selects
     end
