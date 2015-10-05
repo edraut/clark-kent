@@ -20,14 +20,14 @@ module ClarkKent
     validates :sharing_scope_id, presence: true, if: ->(r) { r.sharing_scope_type.present? }
 
     def self.send_report_to_s3(report_id, params)
-      report_class = params['report_class'].constantize if params['report_class']
+      report_class = params[:report_class].constantize if params[:report_class]
       report_class ||= ::ClarkKent::Report
       reportable = report_class.find(report_id)
       report = ('ClarkKent::ReportEmail' == report_class.name) ? reportable.report : reportable
       query = reportable.get_query(params)
       row_count = reportable.get_query(params, true)
       bucket = AWS::S3::Bucket.new(ClarkKent::ReportUploaderBucketName)
-      report_destination = bucket.objects[params['report_result_name']]
+      report_destination = bucket.objects[params[:report_result_name]]
       byte_count = 0
       temp_buffer = report.headers.to_csv
       offset = 0
@@ -64,7 +64,7 @@ module ClarkKent
         expires: 60*60*24*30 #good for 30 days
       )
       if 'ClarkKent::Report' == report_class.name
-        ForeignOffice.publish(channel: params['report_result_name'], object: {report_result_url: report_result_url.to_s} )
+        ForeignOffice.publish(channel: params[:report_result_name], object: {report_result_url: report_result_url.to_s} )
       end
       report_result_url.to_s
     end

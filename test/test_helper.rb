@@ -10,6 +10,7 @@ require 'minitest'
 require 'minitest/unit'
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'pry'
 
 Rails.backtrace_cleaner.remove_silencers!
 

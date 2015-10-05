@@ -39,7 +39,7 @@ module ClarkKent
 
     def send_email(user_id)
       user = ClarkKent.user_class.find(user_id)
-      params = {'report_result_name' => "report-#{self.id}-user-#{user_id}-#{Time.now.to_formatted_s(:number)}", 'report_class' => 'ClarkKent::ReportEmail'}
+      params = {report_result_name: "report-#{self.id}-user-#{user_id}-#{Time.now.to_formatted_s(:number)}", report_class: 'ClarkKent::ReportEmail'}
       SharingScopeKind.custom.each do |sharing_scope_kind|
         unless report.report_filters.map(&:filter_name).include? sharing_scope_kind.basic_association_id_collection_name.to_s
           associations = sharing_scope_kind.associated_containers_for(user)
