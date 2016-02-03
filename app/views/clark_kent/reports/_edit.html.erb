@@ -1,9 +1,5 @@
 <div class="ih-row">
-  <%= simple_form_for @report, html: @report.persisted? ? {
-    data: {
-      ajax_form: true,
-      ajax_target: '#report_info_container' }
-  } : {} do |f| %>
+  <%= simple_form_for @report, html: @report.persisted? ? ajax_form_hash( '#report_info_container' ) : {} do |f| %>
     <div class="ih-span one-quarter">
       <%= f.input :name %>
     </div>
@@ -17,21 +13,21 @@
       <div class="ih-row">sharing</div>
       <div class="ih-row">
         <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options_for_user(current_user),
-          input_html: {data: {revealer: true, sub_type: "FormFieldRevealer", revealer_children_id: "sharing_options"}},
+          input_html: revealer("sharing_options", highlander: true),
           label: false, include_blank: false %>
       </div>
-      <div class="ih-row" data-revealer-target="sharing_options">
-        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id}, wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => ClarkKent.user_class_name, id: "sharing_options_#{ClarkKent.user_class_name}"} %>
+      <div class="ih-row" <%= revealer_target_attrs("sharing_options") %>>
+        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
         <% ClarkKent::SharingScopeKind.custom_for_user(current_user).each do |sharing_scope_kind| %>
           <% if sharing_scope_kind.associated_containers_for(current_user).respond_to? :each %>
             <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,
-              wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.class_name, id: "sharing_options_#{sharing_scope_kind.class_name}"} %>
+              wrapper_html: revealer_option("sharing_options", trigger: sharing_scope_kind.class_name).merge(id: "sharing_options_#{sharing_scope_kind.class_name}") %>
           <% else %>
-            <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: sharing_scope_kind.associated_containers_for(current_user).id}, wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => sharing_scope_kind.associated_containers_for(current_user).class.name, id: "sharing_options_#{sharing_scope_kind.associated_containers_for(current_user).class.name}"} %>
+            <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: sharing_scope_kind.associated_containers_for(current_user).id}, wrapper_html: revealer_option("sharing_options", trigger: sharing_scope_kind.associated_containers_for(current_user).class.name).merge(id: "sharing_options_#{sharing_scope_kind.associated_containers_for(current_user).class.name}") %>
           <% end %>
         <% end %>
         <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: ''},
-          wrapper_html: {'data-revealer_id' => "sharing_options", 'data-revealer-trigger' => "", id: "sharing_options_"} %>
+          wrapper_html: revealer_option("sharing_options", trigger: "").merge(id: "sharing_options_") %>
       </div>
     </div>
     <div class="ih-span one-quarter margin-top right">
@@ -39,7 +35,6 @@
         <%= f.button :submit %>
         <% unless @report.new_record? %>
             &nbsp; <%= ajax_link 'cancel', report_url(@report), {class: 'right'}, "#report_info_container" %>
-            }
           </div>
           <div class="ih-row right">or</div>
           <div class="ih-row">

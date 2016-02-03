@@ -10,7 +10,7 @@
       <%= link_to 'Add a Filter', new_report_filter_url(filterable_id: filterable.id, filterable_type: filterable.class.name), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: "#new_report_filter_container_#{dom_id(filterable)}" } %>
     </div>
 
-    <div id="new_report_filter_container_<%= dom_id(filterable) %>" class="ih-row margin-top">
+    <div id="<%= dom_id filterable, :new_report_filter_container %>" class="ih-row margin-top">
 
     </div>
   </div>

@@ -3,7 +3,12 @@
 		<%= filter.param.humanize %>
 	</div>
 	<div class="ih-row">
-		<% options = @filter_collections.send(filter.collection) %>
+		<% options = case filter.collection.class.name
+			 when 'String', 'Symbol'
+			   @filter_collections.send(filter.collection)
+			 when 'Array'
+			   filter.collection
+			 end %>
 		<%= select_tag filter.param,
 			options_from_collection_for_select(
 				options,

@@ -1,6 +1,5 @@
 class ClarkKent::ReportsController < ClarkKent::ApplicationController
   require 'csv'
-  respond_to :html, :csv
   before_filter :get_these_params, :prepare_filters
 
   def set_manage_tab

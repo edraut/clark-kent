@@ -14,19 +14,16 @@
           sub_type: "AddALineForm",
           ajax_target: report_filter.new_record? ? "#report_filter_list_#{dom_id(report_filter.filterable)}" : "#report_filter_#{report_filter.id}",
           insert_method: report_filter.new_record? ? 'append' : 'html',
-          container: "#new_report_filter_container_#{dom_id(report_filter.filterable)}",
+          container: dom_target(report_filter.filterable, :new_report_filter_container),
           ajax_flash: true } } do |f| %>
     <div class="ih-span one-third">
       <%= f.input :filterable_id, as: :hidden %>
       <%= f.input :filterable_type, as: :hidden %>
       <% if report_filter.new_record? %>
         <%= f.input :filter_name, collection: report_filter.filterable.available_filter_options,
-              input_html: {
-                data: {
-                  revealer: 'true',
-                  sub_type: 'FormFieldRevealer',
-                  revealer_children_id: "filter_value_options_#{report_filter.object_id}" },
-                id: "report_filter_filter_name_#{report_filter.object_id}"},
+              input_html:
+                revealer("filter_value_options_#{report_filter.object_id}", highlander: true).merge(
+                  id: "report_filter_filter_name_#{report_filter.object_id}"),
               include_blank: false %>
       <% else %>
         <div class="ih-row quiet">Filter Name</div>
@@ -34,9 +31,9 @@
       <% end %>
     </div>
     <% if report_filter.new_record? %>
-      <div class="ih-span one-third" data-revealer-target="filter_value_options_<%= report_filter.object_id %>">
+      <div class="ih-span one-third" <%= revealer_target_attrs("filter_value_options_#{report_filter.object_id}") %>>
         <% report_filter.filterable.available_filters.each do |name,label| %>
-          <div data-revealer_id="filter_value_options_<%= report_filter.object_id %>" data-revealer-trigger="<%= name %>" id="filter_value_options_<%= name %>">
+          <div <%= revealer_option_attrs("filter_value_options_#{report_filter.object_id}", trigger: name) %> id="filter_value_options_<%= name %>">
             <%= render partial: report_filter.filterable.filter_kind(name) + '_edit', locals: {f: f, report_filter: report_filter, name: name} %>
           </div>
         <% end %>
@@ -48,7 +45,9 @@
     <% end %>
     <div class="ih-span right margin-top">
       <%= f.button :submit %>
-      <% unless report_filter.new_record? %>
+      <% if report_filter.new_record? %>
+        &nbsp; <a <%= emptier dom_target(report_filter.filterable, :new_report_filter_container) %>> cancel </a>
+      <% else %>
         &nbsp; <%= link_to 'cancel', report_filter_url(report_filter),
           data: {ajax_link: "true", ajax_target: "#report_filter_#{report_filter.id}"} %>
         &nbsp; <%= link_to '&otimes;'.html_safe, report_filter_url(report_filter), class: "delete", data: {ajax_delete: "true", ajax_target: "#report_filter_#{report_filter.id}" }, tabindex: "-1" %>
