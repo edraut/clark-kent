@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "kaminari", "< 1"
   s.add_dependency "thin_man", ">= 0.12.2", "< 0.13"
   s.add_dependency "foreign_office", ">= 0.10.3", "< 0.12"
-  s.add_dependency "hooch", ">= 0.7.1" , "< 0.8"
+  s.add_dependency "hooch", ">= 0.7.1" , "< 1.0"
   s.add_dependency 'aws-sdk', '< 2'
 
   s.add_development_dependency "sqlite3", "< 2"
