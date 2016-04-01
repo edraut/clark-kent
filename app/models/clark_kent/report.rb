@@ -4,7 +4,7 @@ module ClarkKent
   class Report < ActiveRecord::Base
     include ClarkKent::Cloneable
 
-    SortDirections = {'A->Z' => 'asc', 'Z->A' => 'desc'}
+    SortDirections = {'ascending' => 'asc', 'descending' => 'desc'}
 
     attr_accessor :summary_row_storage
 
