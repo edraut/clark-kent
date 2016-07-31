@@ -32,6 +32,14 @@ module ClarkKent
     def link
       report.column_options_for(self.name.to_sym).link
     end
+
+    def time_zone_column
+      report.column_options_for(self.name.to_sym).time_zone_column
+    end
+
+    def time_format
+      report.column_options_for(self.name.to_sym).time_format
+    end
 	end
 
 	class AbstractCalculator

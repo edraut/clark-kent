@@ -16,7 +16,7 @@ require 'test_helper'
         offset: "this_week")
       bucket_mock = ->(string) { raise 'finished building report'}
       err = assert_raises(RuntimeError) do
-        AWS::S3::Bucket.stub :new, bucket_mock, [String] do
+        Aws::S3::Bucket.stub :new, bucket_mock, [String] do
           report_email.send_email(user.id)
         end
       end

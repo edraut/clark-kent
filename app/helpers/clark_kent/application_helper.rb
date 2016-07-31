@@ -33,11 +33,20 @@ module ClarkKent
       (value =~ /\d/) && (value =~ /\./) && !(value =~ /[a-zA-Z]/)
     end
 
-    def display_for_value(value, column=nil)
+    def display_for_value(value, column, row)
       ##TODO, genericize this link display. link info must come from model config.
       return link_to(value, main_app.send(column.link, id: value)) if column.try(:link) && value.present?
       return value.join(', ') if value.is_a? Array
       return value.to_formatted_s(:datepicker) if value.is_a? Date
+      if [DateTime,Time,ActiveSupport::TimeWithZone].any?{|k| value.class <= k}
+        if column.try(:time_zone_column) && row[column.time_zone_column].present?
+          time_zone = row[column.time_zone_column]
+          display_time = value.in_time_zone(time_zone)
+        else
+          display_time = value
+        end
+        return display_time.to_s(column.try :time_format)
+      end
       return number_to_currency(value) if value.is_a? Float or value.is_a? BigDecimal or is_decimal?(value)
       return '&#10003;'.html_safe if 't' == value or true == value
       return '' if 'f' == value or false == value

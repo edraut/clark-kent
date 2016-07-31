@@ -33,7 +33,7 @@
 			<% @rows.each do |row| %>
 				<tr>
 					<% @report.report_columns.each do |column| %>
-						<td><%= display_for_value(row[column.column_name], column) %></td>
+						<td><%= display_for_value(row[column.column_name], column, row) %></td>
 					<% end %>
 				</tr>
 			<% end %>

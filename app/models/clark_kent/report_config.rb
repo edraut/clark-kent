@@ -16,7 +16,7 @@ module ClarkKent
     end
   end
   class ReportColumnConfig
-    attr_accessor :name, :order_sql, :custom_select, :link, :summarizable, :includes, :joins, :extra_scopes, :where, :group
+    attr_accessor :name, :order_sql, :custom_select, :link, :time_zone_column, :time_format, :summarizable, :includes, :joins, :extra_scopes, :where, :group
     def initialize params = {}
       params.each { |key, value| send "#{key}=", value }
     end
