@@ -1,4 +1,5 @@
 module ClarkKent
+require 'aws-sdk-v1'
   # load the builders
   Dir.glob(Rails.root.join('app/models/reporting/*.rb')) { |file| load file }
   class Report < ActiveRecord::Base
@@ -26,7 +27,7 @@ module ClarkKent
       report = ('ClarkKent::ReportEmail' == report_class.name) ? reportable.report : reportable
       query = reportable.get_query(params)
       row_count = reportable.get_query(params, true)
-      bucket = Aws::S3::Bucket.new(ClarkKent::ReportUploaderBucketName)
+      bucket = AWS::S3::Bucket.new(ClarkKent::ReportUploaderBucketName)
       report_destination = bucket.objects[params[:report_result_name]]
       byte_count = 0
       temp_buffer = report.headers.to_csv
