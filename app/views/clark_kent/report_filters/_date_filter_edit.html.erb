@@ -2,8 +2,8 @@
 			input_html: {data: {revealer: "true", sub_type: "FormFieldRevealer", revealer_children_id: "period_options_#{name}_#{f.object.object_id}"}} %>
 <div data-revealer-target="period_options_<%= name %>_<%= f.object.object_id %>">
 	<%= f.input :offset, collection: ClarkKent::ReportDateFilter::WeekPeriodOptions, include_blank: false, label: 'Report start: when?',
-				wrapper_html: {'data-revealer_id' => "period_options_#{name}_#{f.object.object_id}", 'data-revealer-triggers' => "['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']"} %>
+				wrapper_html: {'data-revealer-id' => "period_options_#{name}_#{f.object.object_id}", 'data-revealer-triggers' => "['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']"} %>
 	<%= f.input :offset, collection: ClarkKent::ReportDateFilter::MonthPeriodOptions, include_blank: false, label: 'Report start: when?',
-				wrapper_html: {'data-revealer_id' => "period_options_#{name}_#{f.object.object_id}", 'data-revealer-triggers' => "['beginning of month','beginning of week']"} %>
+				wrapper_html: {'data-revealer-id' => "period_options_#{name}_#{f.object.object_id}", 'data-revealer-triggers' => "['beginning of month','beginning of week']"} %>
 </div>
 <%= f.input :duration, collection: ClarkKent::ReportDateFilter::Durations %>

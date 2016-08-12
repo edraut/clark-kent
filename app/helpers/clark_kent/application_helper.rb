@@ -33,7 +33,7 @@ module ClarkKent
       (value =~ /\d/) && (value =~ /\./) && !(value =~ /[a-zA-Z]/)
     end
 
-    def display_for_value(value, column, row)
+    def display_for_value(value, column = nil, row = {})
       ##TODO, genericize this link display. link info must come from model config.
       return link_to(value, main_app.send(column.link, id: value)) if column.try(:link) && value.present?
       return value.join(', ') if value.is_a? Array
