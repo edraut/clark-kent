@@ -1,7 +1,7 @@
 require "clark_kent/engine"
 require 'simple_form'
 require 'thin_man'
-require 'aws-sdk'
+require 'aws-sdk-v1'
 
 module ClarkKent
   mattr_accessor  :resource_options, :user_class_name, :other_sharing_scopes, :base_controller,

@@ -3,10 +3,8 @@ require 'test_helper'
 describe ClarkKent::ReportsController do
   setup do
     @routes = ClarkKent::Engine.routes
-  end
-
-  before do
     @report = ClarkKent::Report.first
+    @report_email = @report.report_emails.create(when_to_send: 'Monday', name: 'Owner Arrival')
     @current_user = User.first
   end
 
