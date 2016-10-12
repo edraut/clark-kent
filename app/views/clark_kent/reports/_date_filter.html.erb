@@ -9,6 +9,7 @@
 		            params["#{filter.param}_from"],
 		            data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
 		            class: 'string input-small',
+			          readonly: true,
 		            id: "#{filter.param}_start_date" %>
 		</div>
 		<div class="ih-span">
@@ -17,6 +18,7 @@
 		          params["#{filter.param}_until"],
 		          data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
 		          class: 'string input-small',
+		          readonly: true,
 		          id: "#{filter.param}_end_date" %>
 		</div>
 	</div>
