@@ -28,8 +28,9 @@ require 'test_helper'
       report = ClarkKent::Report.first
       report.update_columns(sharing_scope_type: 'Department', sharing_scope_id: user.department_id)
       report_email = report.report_emails.create(name: 'test_emailer')
-      assert_raises(ClarkKent::ReportFilterError) do
-        report_email.send_email(user.id)
-      end
+      report_email.send_email(user.id)
+      mailed = ActionMailer::Base.deliveries.last
+      assert_match /Your report could not be created due to the following problem/, mailed.body.to_s
+      assert_match /At least one date range is required/, mailed.body.to_s
     end
   end
