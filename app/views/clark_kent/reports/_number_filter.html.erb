@@ -5,7 +5,7 @@
 	<div class="ih-row">
 		<div class="ih-span">
 		  min<br>
-		  <%= number_field_tag "#{filter.param}_min",
+		  <%= text_field_tag "#{filter.param}_min",
 		            params["#{filter.param}_min"],
 		            class: 'string input-small',
 		            id: "#{filter.param}_min" %>
