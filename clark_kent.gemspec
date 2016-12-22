@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "< 6"
-  s.add_dependency "sass-rails", "< 5.1"
+  s.add_dependency "sass-rails", "< 6"
   s.add_dependency "simple_form", ">= 3.2.1", "< 4.0"
   s.add_dependency "kaminari", "< 1"
   s.add_dependency "thin_man", ">= 0.12.2", "< 1.0"
