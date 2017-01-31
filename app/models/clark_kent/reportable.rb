@@ -13,7 +13,7 @@ module ClarkKent
 	          query = self.send(arel_method_name, query, key, val)
 	        end
 	      end
-
+	      query = query.distinct if params[:distinct]
 	      query
 	    end
 
