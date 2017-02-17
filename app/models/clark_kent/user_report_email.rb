@@ -1,5 +1,7 @@
 module ClarkKent
 	class UserReportEmail < ActiveRecord::Base
+    include ClarkKent::Cloneable
+
 		belongs_to :user, class_name: ClarkKent.user_class_name
 		belongs_to :report_email
 
