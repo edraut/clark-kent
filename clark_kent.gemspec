@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["edraut@gmail.com"]
   s.homepage    = "https://github.com/edraut/clark-kent"
   s.summary     = "A powerful reporting engine for Rails apps."
-  s.description = "A powerful reporting engine for Rails apps."
+  s.description = "Get an ad hoc report building UI for any model from your app that you configure for ClarkKent."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
