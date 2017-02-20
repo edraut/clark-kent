@@ -1,6 +1,6 @@
 class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
-  before_filter :prepare_report_filter
-  before_filter :prepare_report, :prepare_filters
+  before_action :prepare_report_filter
+  before_action :prepare_report, :prepare_filters
 
   def new
     @report_filter = ClarkKent::ReportFilter.new(filterable_id: @filterable.id, filterable_type: @filterable.class.name)

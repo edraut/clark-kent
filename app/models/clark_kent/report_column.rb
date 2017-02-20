@@ -8,6 +8,8 @@ module ClarkKent
 
 		scope :sorted, -> { order("clark_kent_report_columns.column_order") }
 
+    validates_with ReportColumnValidator
+    
 		def report_sort_pretty
 			{'ascending' => 'A->Z','descending' => 'Z->A'}[self.report_sort]
 		end
@@ -21,6 +23,10 @@ module ClarkKent
 			report.column_options_for(self.column_name.to_sym).summarizable
 		end
 
+    def sortable?
+      config_options.order_sql.present?
+    end
+
 		def calculator
 			('ClarkKent::' + summary_method.camelcase + 'Calculator').constantize
 		end
@@ -29,16 +35,20 @@ module ClarkKent
       column_name
     end
 
+    def config_options
+      report.column_options_for(self.name.to_sym)
+    end
+
     def link
-      report.column_options_for(self.name.to_sym).link
+      config_options.link
     end
 
     def time_zone_column
-      report.column_options_for(self.name.to_sym).time_zone_column
+      config_options.time_zone_column
     end
 
     def time_format
-      report.column_options_for(self.name.to_sym).time_format
+      config_options.time_format
     end
 	end
 

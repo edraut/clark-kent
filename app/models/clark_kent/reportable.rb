@@ -163,7 +163,7 @@ module ClarkKent
 			  	order_column, order_direction = match_value.split('-')
 			  end
 				column_info = column_options_for(order_column.to_sym)
-				if column_info.respond_to? :order_sql
+				if column_info.respond_to?(:order_sql) && column_info.order_sql.present?
 				  order_sql = column_info.order_sql
 			  	order_sql = "#{order_sql} #{order_direction}"
 			  	query = query.order(order_sql)

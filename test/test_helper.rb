@@ -7,11 +7,8 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', 
 # ActiveRecord::Migration.maintain_test_schema!
 
 require "rails/test_help"
-require 'minitest'
 require 'minitest/spec'
 require 'minitest/rails'
-require 'minitest/unit'
-require 'minitest/autorun'
 require 'minitest/pride'
 require 'pry'
 
@@ -19,3 +16,8 @@ Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+class ControllerTest < ActionController::TestCase
+  #custom controller test config here
+end
+

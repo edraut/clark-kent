@@ -33,7 +33,7 @@
       <% end %>
     </div>
     <div class="ih-span one-fifth">
-      <% unless report_column.report.sort_column.present? and report_column.report.sort_column != report_column %>
+      <% if report_column.report.sort_column.blank? || report_column.report.sort_column == report_column %>
         <%= f.input :report_sort, collection: [['A->Z','ascending'],['Z->A','descending']], include_blank: true %>
       <% end %>
     </div>

@@ -1,17 +1,24 @@
 require 'test_helper'
 
 class ClarkKent::ReportableTest < ActiveSupport::TestCase
-  test "it adds required filters if present" do
+  it "it adds required filters if present" do
     report = ClarkKent::Report.create(name: 'test one', resource_type: 'Order')
     query = Order.report({created_at_until: Date.today, created_at_from: Date.yesterday},report)
     assert_match('orders.user_id > 0', query.to_sql)
   end
 
-  test "it works without any required filters" do
+  it "it works without any required filters" do
     report = ClarkKent::Report.create(name: 'test one', resource_type: 'TestReportable')
     query = TestReportable.report({created_at_until: Date.today, created_at_from: Date.yesterday},report)
     refute_match('orders.user_id > 0', query.to_sql)
     assert_match('SELECT "orders".*', query.to_sql)
+  end
+
+  it "doesn't blow up if order_sql is blank" do
+    report = ClarkKent::Report.create(name: 'test one', resource_type: 'TestReportable')
+    report_column = report.report_columns.create(column_name: :user_name, column_order: 1, report_sort: 'ascending')
+    query = TestReportable.report({created_at_until: Date.today, created_at_from: Date.yesterday},report)
+    refute_match('order by', query.to_sql)
   end
 end
 
