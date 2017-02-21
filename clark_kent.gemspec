@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 5", "< 6"
   s.add_dependency "sass-rails", "< 6"
   s.add_dependency "simple_form", ">= 3.2.1", "< 4.0"
-  s.add_dependency "kaminari", ">= 1", "< 2"
+  s.add_dependency "kaminari", "<= 1"
   s.add_dependency "thin_man", ">= 0.12.2", "< 1.0"
   s.add_dependency "foreign_office", ">= 0.10.3", "< 1.0"
   s.add_dependency "hooch", ">= 0.7.1" , "< 1.0"

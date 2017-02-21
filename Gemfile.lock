@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    clark_kent (0.8.1)
+    clark_kent (0.8.2)
       aws-sdk-v1 (< 2)
       foreign_office (>= 0.10.3, < 1.0)
       hooch (>= 0.7.1, < 1.0)
-      kaminari (>= 1, < 2)
+      kaminari (<= 1)
       rails (>= 5, < 6)
       sass-rails (< 6)
       simple_form (>= 3.2.1, < 4.0)
@@ -68,18 +68,9 @@ GEM
       rails (>= 4.0.1, < 6)
     i18n (0.8.0)
     json (1.8.6)
-    kaminari (1.0.1)
-      activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.0.1)
-      kaminari-activerecord (= 1.0.1)
-      kaminari-core (= 1.0.1)
-    kaminari-actionview (1.0.1)
-      actionview
-      kaminari-core (= 1.0.1)
-    kaminari-activerecord (1.0.1)
-      activerecord
-      kaminari-core (= 1.0.1)
-    kaminari-core (1.0.1)
+    kaminari (0.17.0)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)

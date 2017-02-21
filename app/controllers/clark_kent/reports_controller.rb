@@ -16,7 +16,11 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
   def create
     @report = ClarkKent::Report.new(report_params)
     @report.save
-    render action: :edit
+    if @report.errors.empty?
+      render action: :edit
+    else
+      render action: :new, status: :conflict
+    end
   end
 
   def show

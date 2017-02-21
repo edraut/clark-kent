@@ -19,6 +19,7 @@ require 'aws-sdk-v1'
     scope :shared, -> { where(sharing_scope_id: nil) }
 
     validates :sharing_scope_id, presence: true, if: ->(r) { r.sharing_scope_type.present? }
+    validates :resource_type, presence: {message: 'You must choose a type.'}, allow_blank: false
 
     def self.send_report_to_s3(report_id, params)
       report_class = params[:report_class].constantize if params[:report_class]

@@ -32,6 +32,18 @@ class ClarkKent::ReportsControllerTest < ControllerTest
     assert_response :success
   end
 
+  it "should render errors during creation" do
+    post :create, params:
+      {report: {
+            name: 'delete me', resource_type: '',
+            sharing_scope_id: report.sharing_scope_id, sharing_scope_type: report.sharing_scope_type },
+            current_user_id: current_user.id}
+    report = ClarkKent::Report.find_by(name: 'delete me')
+    report.must_be_nil
+    assert_response :conflict
+    @response.body.must_match 'You must choose a type.'
+  end
+
   it "should show report" do
     get :show, params: {id: report, current_user_id: current_user.id}
     assert_response :success
