@@ -7,7 +7,7 @@ module ClarkKent
 		belongs_to :report
 
 		scope :sorted, -> { order("clark_kent_report_columns.column_order") }
-
+    validates :column_name, presence: true
     validates_with ReportColumnValidator
     
 		def report_sort_pretty

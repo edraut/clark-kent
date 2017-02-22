@@ -10,7 +10,11 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
   def create
     @report_column = ClarkKent::ReportColumn.new(report_column_params)
     @report_column.save
-    render partial: 'show_wrapper', locals: {report_column: @report_column}
+    if @report_column.errors.empty?
+      render partial: 'show_wrapper', locals: {report_column: @report_column}
+    else
+      render partial: 'form', locals: {report_column: @report_column}, status: :conflict
+    end
   end
 
   def show
@@ -23,8 +27,13 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
 
   def update
     @report_column.update_attributes(report_column_params)
-    @ajax_flash = {notice: "Your changes were saved."}
-    render partial: 'show', locals: {report_column: @report_column}
+    if @report_column.errors.empty?
+      render json: {
+        flash_message: "Your changes were saved.",
+        html: render_to_string(partial: 'show', locals: {report_column: @report_column}) }
+    else
+      render partial: 'form', locals: {report_column: @report_column}, status: :conflict
+    end
   end
 
   def destroy
