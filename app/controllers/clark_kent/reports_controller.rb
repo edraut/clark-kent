@@ -85,7 +85,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
   protected
 
   def get_these_params
-    @these_params ||= params
+    @these_params ||= params.permit!
   end
 
   def report_params
