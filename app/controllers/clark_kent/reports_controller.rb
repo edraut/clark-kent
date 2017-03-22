@@ -66,8 +66,12 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def update
     @report = ClarkKent::Report.find(params[:id])
-    @report.update_attributes(report_params)
-    render partial: 'show'
+    UpdateReport.new(@report,report_params).call
+    if @report.errors.empty?
+      render partial: 'show'
+    else
+      render partial: 'edit', status: :conflict
+    end
   end
 
   def clone
