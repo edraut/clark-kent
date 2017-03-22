@@ -18,6 +18,15 @@ module ClarkKent
 
     class FakeReportColumn
       attr_accessor :time_zone_column
+
+      def has_options?
+        true
+      end
+      
+      def link
+        nil
+      end
+      
       def initialize(params)
         self.time_zone_column = params[:time_zone_column]
       end

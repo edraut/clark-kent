@@ -28,7 +28,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     if request.xhr?
       render partial: 'show'
     else
-      prepare_params if defined? prepare_params
+      prepare_params(params.permit!) if defined? prepare_params
       if params[:run_report].present?
         @these_params[:page] = params[:page]
         @these_params[:per] = @report.resource_class.default_per_page
@@ -85,7 +85,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
   protected
 
   def get_these_params
-    @these_params ||= params
+    @these_params ||= params.permit!.to_h.to_hash
   end
 
   def report_params

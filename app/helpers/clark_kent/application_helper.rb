@@ -35,11 +35,11 @@ module ClarkKent
 
     def display_for_value(value, column = nil, row = {})
       ##TODO, genericize this link display. link info must come from model config.
-      return link_to(value, main_app.send(column.link, id: value)) if column.try(:link) && value.present?
+      return link_to(value, main_app.send(column.link, id: value)) if column&.has_options? && column.link && value.present?
       return value.join(', ') if value.is_a? Array
       return value.to_formatted_s(:datepicker) if value.is_a? Date
       if [DateTime,Time,ActiveSupport::TimeWithZone].any?{|k| value.class <= k}
-        if column.try(:time_zone_column) && row[column.time_zone_column].present?
+        if column&.has_options? && column.time_zone_column && row[column.time_zone_column].present?
           time_zone = row[column.time_zone_column]
           display_time = value.in_time_zone(time_zone)
         else
@@ -62,7 +62,7 @@ module ClarkKent
     def get_selected_order_direction(params, column)
       return nil unless params[:order].present?
       current_order_column, current_order_direction = params[:order].split('-')
-      return nil unless column.column_name == current_order_column
+      return nil unless column&.column_name == current_order_column
       {"asc" => '&darr;'.html_safe, "desc" => '&uarr;'.html_safe}[current_order_direction]
     end
 

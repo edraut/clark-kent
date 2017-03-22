@@ -1,7 +1,7 @@
   <div id="report_filter_container_<%= dom_id(filterable) %>">
     <h3><%= filterable.class.name.sub('ClarkKent::','').underscore.humanize %> Filters</h3>
     <div id="report_filter_list_<%= dom_id(filterable) %>" class="ih-row">
-      <% for report_filter in filterable.report_filters %>
+      <% for report_filter in filterable.viable_report_filters %>
         <%= render partial: '/clark_kent/report_filters/show_wrapper', locals: {report_filter: report_filter} %>
       <% end %>
     </div>

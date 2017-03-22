@@ -1,7 +1,7 @@
   <div id="report_column_container">
     <h3>Report Columns</h3>
     <div id="report_column_list" class="ih-row">
-      <% for report_column in @report.report_columns %>
+      <% @report.viable_report_columns.each do |report_column| %>
         <%= render partial: '/clark_kent/report_columns/show_wrapper', locals: {report_column: report_column} %>
       <% end %>
     </div>

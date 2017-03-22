@@ -10,6 +10,10 @@ module ClarkKent
     validates :column_name, presence: true
     validates_with ReportColumnValidator
     
+    def has_options?
+      config_options.present?
+    end
+
 		def report_sort_pretty
 			{'ascending' => 'A->Z','descending' => 'Z->A'}[self.report_sort]
 		end
@@ -20,7 +24,7 @@ module ClarkKent
 		end
 
 		def summarizable?
-			report.column_options_for(self.column_name.to_sym).summarizable
+			config_options.summarizable
 		end
 
     def sortable?
