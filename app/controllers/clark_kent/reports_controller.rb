@@ -105,7 +105,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def parse_date(date_input)
     begin
-      return Date.american_parse(date_input)
+      return american_parse(date_input)
     rescue ArgumentError
       begin
         return Date.parse(date_input)
