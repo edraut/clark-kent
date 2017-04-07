@@ -105,20 +105,17 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def parse_date(date_input)
     begin
-      return american_parse(date_input)
+      date = american_parse(date_input)
+      date ||= Date.parse(date_input)
     rescue ArgumentError
-      begin
-        return Date.parse(date_input)
-      rescue ArgumentError
-        return nil
-      end
+      return nil
     end
   end
 
   def american_parse(string)
     string.gsub!("%2F", "/")
     month,day,year = string.split('/').map{|part| part.to_i}
-    raise ArgumentError, "#{string} is not a valid date format" unless [month,day,year].all? { |c| !!c }
+    return nil unless [month,day,year].all? { |c| !!c }
     year = normalize_year(year)
     Date.new(year,month,day)
   end
