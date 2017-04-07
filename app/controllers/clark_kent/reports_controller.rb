@@ -30,6 +30,13 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     else
       prepare_params(params.permit!) if defined? prepare_params
       if params[:run_report].present?
+        @these_params.each do |k,v|
+          if @report.date_filter_names.detect{|fn|
+            @report.filter_options_for(fn).filter_params.include? k.to_s
+          }.present?
+            @these_params[k] = parse_date(v)
+          end
+        end
         @these_params[:page] = params[:page]
         @these_params[:per] = @report.resource_class.default_per_page
         begin
@@ -94,6 +101,33 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def report_params
     params.require(:report).permit(:name, :resource_type, :sharing_scope_id, :sharing_scope_type)
+  end
+
+  def parse_date(date_input)
+    begin
+      return Date.american_parse(date_input)
+    rescue ArgumentError
+      begin
+        return Date.parse(date_input)
+      rescue ArgumentError
+        return nil
+      end
+    end
+  end
+
+  def american_parse(string)
+    string.gsub!("%2F", "/")
+    month,day,year = string.split('/').map{|part| part.to_i}
+    raise ArgumentError, "#{string} is not a valid date format" unless [month,day,year].all? { |c| !!c }
+    year = normalize_year(year)
+    Date.new(year,month,day)
+  end
+
+  def normalize_year(year)
+    if year < 100
+      year = year + ((Date.today.year / 100) * 100)
+    end
+    year
   end
 
 end

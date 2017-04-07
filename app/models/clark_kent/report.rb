@@ -275,7 +275,7 @@ require 'aws-sdk-v1'
     end
 
     def headers
-      the_headers = viable_report_columns.sort_by(&:column_order).map(&:column_name)
+      the_headers = viable_report_columns.sort_by{|c| c.column_order || 100}.map(&:column_name)
 
       unless name =~ /net\s?promoter/i
         the_headers.map(&:humanize)
