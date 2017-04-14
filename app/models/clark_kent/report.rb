@@ -28,7 +28,7 @@ require 'aws-sdk-v1'
       report = ('ClarkKent::ReportEmail' == report_class.name) ? reportable.report : reportable
       query = reportable.get_query(params)
       row_count = reportable.get_query(params, true)
-      bucket = AWS::S3::Bucket.new(ClarkKent::ReportUploaderBucketName)
+      bucket = AWS::S3::Bucket.new(ClarkKent.bucket_name)
       report_destination = bucket.objects[params[:report_result_name]]
       byte_count = 0
       temp_buffer = report.headers.to_csv

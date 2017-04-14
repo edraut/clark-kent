@@ -2,7 +2,7 @@ require 'test_helper'
 
   class ClarkKent::ReportEmailTest < ActiveSupport::TestCase
     test "sends report to s3" do
-      ClarkKent::ReportUploaderBucketName = 'test_bucket'
+      ClarkKent.config(bucket_name: "clark-kent-test")
       user = User.find_by(email: 'taproot@gmail.com')
       report = ClarkKent::Report.first
       report.update_columns(sharing_scope_type: 'Department', sharing_scope_id: user.department_id)
