@@ -50,7 +50,7 @@ class ClarkKent::ReportsControllerTest < ControllerTest
   end
 
   it "should show report results" do
-    get :show, params: {id: report, current_user_id: current_user.id, run_report: true, created_at_until: Date.today, created_at_from: Date.yesterday}
+    get :show, params: {id: report, current_user_id: current_user.id, run_report: true, created_at_until: Date.today.strftime("%m/%d/%Y"), created_at_from: Date.yesterday}
     assert_response :success
     @response.body.must_match 'Guitar strings'
   end

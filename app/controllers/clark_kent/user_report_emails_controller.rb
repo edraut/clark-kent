@@ -1,6 +1,6 @@
 class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
-  before_filter :prepare_user_report_email
-  before_filter :prepare_report_email
+  before_action :prepare_user_report_email
+  before_action :prepare_report_email
 
   def new
     @user_report_email = ClarkKent::UserReportEmail.new(report_email_id: @report_email.id)

@@ -71,6 +71,14 @@ require 'aws-sdk-v1'
       report_result_url.to_s
     end
 
+    def viable_report_columns
+      @viable_report_columns ||= report_columns.to_a.select{|rc| column_options_for(rc.column_name).present? }
+    end
+
+    def viable_report_filters
+      @viable_report_filters ||= report_filters.to_a.select{|rf| filter_options_for(rf.filter_name).present? }
+    end
+
     def get_query(params, count = false)
       self.resource_class.report(params,self, count)
     end
@@ -84,7 +92,7 @@ require 'aws-sdk-v1'
     ## currently only used for the summary row, since we can't get that in the same AR query and have to
     ## add it to the collection after the query returns.
     def row_class
-      report_columns = self.report_columns
+      report_columns = viable_report_columns
       @row_class ||= Class.new do
         report_columns.each do |report_column|
           attr_accessor report_column.column_name.to_sym
@@ -101,7 +109,7 @@ require 'aws-sdk-v1'
     end
 
     def sort_column
-      @sort_column ||= self.report_columns.where("clark_kent_report_columns.report_sort is not NULL and clark_kent_report_columns.report_sort != ''").first
+      @sort_column ||= viable_report_columns.detect{|rc| rc.report_sort.present?}
     end
 
     def sorter
@@ -113,35 +121,35 @@ require 'aws-sdk-v1'
     end
 
     def arel_includes
-      self.report_columns.map{|column|
+      viable_report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
         column_info.includes
         }.compact
     end
 
     def arel_joins
-      self.report_columns.map{|column|
+      viable_report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
         column_info.joins
         }.compact
     end
 
     def extra_scopes
-      self.report_columns.map{|column|
+      viable_report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
         column_info.extra_scopes
         }.flatten.compact
     end
 
     def extra_filters
-      self.report_columns.map{|column|
+      viable_report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
         column_info.where
         }.flatten.compact
     end
 
     def groups
-      self.report_columns.map{|column|
+      viable_report_columns.map{|column|
         column_info = self.column_options_for(column.column_name)
         column_info.group
         }.flatten.compact
@@ -151,17 +159,17 @@ require 'aws-sdk-v1'
     ## step with the runtime params entered by the user for a specific report run.
     ## nb. the sorter column here may be overridden by a runtime sort if requested by the user.
     def report_filter_params
-      Hash[*self.report_filters.map{|filter| filter.filter_match_params}.flatten].
+      Hash[*viable_report_filters.map{|filter| filter.filter_match_params}.flatten].
         merge(order: self.sorter)
     end
 
     def select_clauses
       @selects = []
-      self.report_columns.each do |report_column|
+      viable_report_columns.each do |report_column|
         column_option = self.column_options_for(report_column.column_name)
         @selects.push column_option.custom_select if column_option.present? && column_option.custom_select.present?
       end
-      self.report_filters.each do |report_filter|
+      viable_report_filters.each do |report_filter|
         column_option = self.column_options_for(report_filter.filter_name.to_sym)
         @selects.push column_option.custom_select if column_option.present? && column_option.custom_select.present?
       end
@@ -208,7 +216,7 @@ require 'aws-sdk-v1'
     ## This is the full set of filter options for defining a report, including the date filters for
     ## an automatic, timed, emailed report.
     def available_email_filters
-      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name| (self.report_filters.pluck(:filter_name)).include? name}
+      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name| (viable_report_filters.map(&:filter_name)).include? name}
     end
 
     def collection_for(filter_name)
@@ -218,17 +226,18 @@ require 'aws-sdk-v1'
     ## These are the filters available at runtime, ie. not including the ones set to define this report.
     ## If updating the report, this is the set available to add as new report definition filters.
     def custom_filters
-      self.resource_class::REPORT_FILTER_OPTIONS.select{|filter| self.report_filters.pluck(:filter_name).exclude? filter.param}
+      self.resource_class::REPORT_FILTER_OPTIONS.select{|filter| viable_report_filters.map(&:filter_name).exclude? filter.param}
     end
 
     ## This is the set of columns not chosed to use in the report. These are the ones available to add
     ## when updating a report.
     def available_columns
-      column_options.reject{|column| self.report_columns.pluck(:column_name).include? column.name.to_s}
+      column_options.reject{|column| viable_report_columns.map(&:column_name).include? column.name.to_s}
     end
 
     def sortable?(column)
-      self.column_options_for(column.column_name).order_sql.present?
+      column_info = self.column_options_for(column.column_name)
+      column_info.present? && column_info.order_sql.present?
     end
 
     def sharing_scope_pretty
@@ -249,24 +258,24 @@ require 'aws-sdk-v1'
     end
 
     def summary_row_values(rows)
-      self.report_columns.each_with_index.map do |report_column,index|
+      viable_report_columns.each_with_index.map do |report_column,index|
         report_column.calculate_summary(rows.map{|row| row[index]})
       end
     end
 
     def summary_row(rows)
-      row_array = self.report_columns.map do |report_column|
+      row_array = viable_report_columns.map do |report_column|
         [report_column.column_name,report_column.calculate_summary(rows.map{|row| row.send(report_column.column_name)})]
       end
       row_class.new(row_array.to_h)
     end
 
     def summary_row?
-      @summary_row_presence ||= self.report_columns.to_a.any?{|c| c.summary_method.present? }
+      @summary_row_presence ||= viable_report_columns.any?{|c| c.summary_method.present? }
     end
 
     def headers
-      the_headers = self.report_columns.sorted.pluck(:column_name)
+      the_headers = viable_report_columns.sort_by{|c| c.column_order || 100}.map(&:column_name)
 
       unless name =~ /net\s?promoter/i
         the_headers.map(&:humanize)

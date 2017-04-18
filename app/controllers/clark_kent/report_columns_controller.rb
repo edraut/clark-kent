@@ -1,6 +1,6 @@
 class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
-  before_filter :prepare_report_column
-  before_filter :prepare_report
+  before_action :prepare_report_column
+  before_action :prepare_report
 
   def new
     @report_column = ClarkKent::ReportColumn.new(report_id: @report.id)
