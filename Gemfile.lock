@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clark_kent (0.8.11)
+    clark_kent (0.9.0)
       aws-sdk-v1 (< 2)
       foreign_office (>= 0.10.3, < 1.0)
       hooch (>= 0.7.1, < 1.0)
