@@ -22,7 +22,7 @@ module ClarkKent
   end
 
   def self.user_class
-    @@user_class = @@user_class_name.constantize
+    @@user_class = (@@user_class_name || "User").constantize
   end
 
 end
