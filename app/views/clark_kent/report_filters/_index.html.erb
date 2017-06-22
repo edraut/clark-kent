@@ -1,16 +1,16 @@
-  <div id="report_filter_container_<%= dom_id(filterable) %>">
-    <h3><%= filterable.class.name.sub('ClarkKent::','').underscore.humanize %> Filters</h3>
-    <div id="report_filter_list_<%= dom_id(filterable) %>" class="ih-row">
-      <% for report_filter in filterable.viable_report_filters %>
-        <%= render partial: '/clark_kent/report_filters/show_wrapper', locals: {report_filter: report_filter} %>
-      <% end %>
-    </div>
-
-    <div class="ih-row margin-top">
-      <%= link_to 'Add a Filter', new_report_filter_url(filterable_id: filterable.id, filterable_type: filterable.class.name), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: "#new_report_filter_container_#{dom_id(filterable)}" } %>
-    </div>
-
-    <div id="<%= dom_id filterable, :new_report_filter_container %>" class="ih-row margin-top">
-
-    </div>
+<div id="report_filter_container_<%= dom_id(filterable) %>">
+  <h3><%= filterable.class.name.sub('ClarkKent::','').underscore.humanize %> Filters</h3>
+  <div id="report_filter_list_<%= dom_id(filterable) %>" class="ih-row">
+    <% for report_filter in filterable.viable_report_filters %>
+      <%= render partial: '/clark_kent/report_filters/show_wrapper', locals: {report_filter: report_filter} %>
+    <% end %>
   </div>
+
+  <div class="ih-row margin-top">
+    <%= link_to 'Add a Filter', new_report_filter_url(filterable_id: filterable.id, filterable_type: filterable.class.name), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: "#new_report_filter_container_#{dom_id(filterable)}" } %>
+  </div>
+
+  <div id="<%= dom_id filterable, :new_report_filter_container %>" class="ih-row margin-top">
+
+  </div>
+</div>

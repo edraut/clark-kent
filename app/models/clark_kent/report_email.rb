@@ -57,12 +57,16 @@ module ClarkKent
     end
 
     def report_filter_params
-      Hash[*self.report_filters.map{|filter| filter.filter_match_params}.flatten].
+      Hash[*self.viable_report_filters.map{|filter| filter.filter_match_params}.flatten].
         merge(order: self.report.sorter).merge(self.report.report_filter_params)
     end
 
     def filter_kind(filter_name)
       self.report.filter_kind(filter_name)
+    end
+
+    def viable_report_filters
+      @viable_report_filters ||= report_filters.to_a.select{|rf| filter_options_for(rf.filter_name).present? }
     end
 
     def resource_class
@@ -82,7 +86,7 @@ module ClarkKent
     end
 
     def available_email_filters
-      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name, label| (self.report_filters.pluck(:filter_name) + self.report.report_filters.pluck(:filter_name)).include? name}
+      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name, label| (self.viable_report_filters.pluck(:filter_name) + self.report.viable_report_filters.pluck(:filter_name)).include? name}
     end
 
     def available_filters
