@@ -1,5 +1,5 @@
 <% if rows %>
-  <% if rows.total_count > rows.count(:id) %>
+  <% if rows.total_count > 50 %>
     <%= link_to 'Print',
                 'javascript:void(0)',
                 onclick: "$('#print_report_modal').modal('show');",

@@ -29,7 +29,7 @@ class ClarkKent::ReportEmailsController < ClarkKent::ApplicationController
 
   def destroy
     @report_email.destroy
-    render nothing: true
+    head :ok
   end
 
   protected

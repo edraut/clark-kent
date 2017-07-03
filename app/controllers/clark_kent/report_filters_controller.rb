@@ -30,7 +30,7 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
 
   def destroy
     @report_filter.destroy
-    render nothing: true
+    head :ok
   end
 
   protected

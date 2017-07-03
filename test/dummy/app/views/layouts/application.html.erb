@@ -2,10 +2,10 @@
 <html>
 <head>
   <title>Dummy</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= stylesheet_link_tag "clark_kent/application.css" %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'clark_kent/application' %>
+  <%= stylesheet_link_tag    'application', media: 'all' unless Rails.env.test? %>
+  <%= stylesheet_link_tag "clark_kent/application.css" unless Rails.env.test? %>
+  <%= javascript_include_tag 'application' unless Rails.env.test? %>
+  <%= javascript_include_tag 'clark_kent/application' unless Rails.env.test? %>
   <%= csrf_meta_tags %>
 </head>
 <body>

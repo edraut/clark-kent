@@ -1,7 +1,7 @@
 <div class="ih-row">
   <%= simple_form_for @report, html: @report.persisted? ? ajax_form_hash( '#report_info_container' ) : {} do |f| %>
     <div class="ih-span one-quarter">
-      <%= f.input :name %>
+      <%= f.input :name, minlength: false %>
     </div>
     <div class="ih-span one-quarter">
       <%= f.input :resource_type,
@@ -18,7 +18,9 @@
           label: false, include_blank: false %>
       </div>
       <div class="ih-row" <%= revealer_target_attrs("sharing_options") %>>
-        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
+            <%= ClarkKent.user_class_name %>
+
+        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id, data: {foo: ClarkKent.user_class_name}}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
         <% ClarkKent::SharingScopeKind.custom_for_user(current_user).each do |sharing_scope_kind| %>
           <% if sharing_scope_kind.associated_containers_for(current_user).respond_to? :each %>
             <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,

@@ -38,7 +38,7 @@ class ClarkKent::ReportColumnsController < ClarkKent::ApplicationController
 
   def destroy
     @report_column.destroy
-    render nothing: true
+    head :ok
   end
 
   protected

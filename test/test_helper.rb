@@ -17,7 +17,7 @@ Rails.backtrace_cleaner.remove_silencers!
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-class ControllerTest < ActionController::TestCase
+class ControllerTest < ActionDispatch::IntegrationTest
   #custom controller test config here
 end
 

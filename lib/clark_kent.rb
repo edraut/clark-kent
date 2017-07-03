@@ -12,12 +12,12 @@ module ClarkKent
   end
 
   def self.config(options)
-    @@resource_options = options[:resource_options].map{|option_hash| ClarkKent::ResourceOption.new option_hash}
+    @@resource_options = options[:resource_options].map{|option_hash| ClarkKent::ResourceOption.new option_hash} if options.has_key? :resource_options
     @@user_class_name = options[:user_class_name]
     @@bucket_name     = options[:bucket_name]
     @@other_sharing_scopes = options[:other_sharing_scopes]
     base_controller_name = options[:base_controller_name]
-    @@base_controller = base_controller_name.constantize
+    @@base_controller = base_controller_name.constantize if base_controller_name.present?
     @@custom_report_links = options[:custom_report_links] || []
   end
 

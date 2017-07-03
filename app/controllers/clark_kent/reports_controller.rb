@@ -19,6 +19,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     if @report.errors.empty?
       render action: :edit
     else
+      puts @report.errors.full_messages
       render action: :new, status: :conflict
     end
   end

@@ -32,7 +32,7 @@ class ClarkKent::UserReportEmailsController < ClarkKent::ApplicationController
 
   def destroy
     @user_report_email.destroy
-    render nothing: true
+    head :ok
   end
 
   def prepare_user_report_email
