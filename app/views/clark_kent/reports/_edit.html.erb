@@ -18,8 +18,6 @@
           label: false, include_blank: false %>
       </div>
       <div class="ih-row" <%= revealer_target_attrs("sharing_options") %>>
-            <%= ClarkKent.user_class_name %>
-
         <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id, data: {foo: ClarkKent.user_class_name}}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
         <% ClarkKent::SharingScopeKind.custom_for_user(current_user).each do |sharing_scope_kind| %>
           <% if sharing_scope_kind.associated_containers_for(current_user).respond_to? :each %>
