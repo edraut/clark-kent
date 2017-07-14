@@ -1,4 +1,3 @@
-
 resource_option_struct = Struct.new(:id, :name)
 
 ClarkKent.config({

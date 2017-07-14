@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3", "< 2"
   s.add_development_dependency "minitest", "< 6"
   s.add_development_dependency "minitest-rails", ">= 3", "< 4"
+  s.add_development_dependency "pry", "< 1"  
   s.add_development_dependency "pry-rails", "< 1"
   s.add_development_dependency "pry-nav", "< 1"
   s.add_development_dependency "pry-remote", "< 1"
