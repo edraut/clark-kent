@@ -8,10 +8,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-
     @current_user ||= ::User.where(id: params[:current_user_id]).first || ::User.where("id is not null").first
     @current_user
   end
+
+  alias_method :effective_user, :current_user
 
   helper_method :current_user
 end
