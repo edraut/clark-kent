@@ -13,18 +13,18 @@
     <div class="ih-span one-quarter">
       <div class="ih-row">sharing</div>
       <div class="ih-row">
-        <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options_for_user(current_user),
+        <%= f.input :sharing_scope_type, collection: ClarkKent::SharingScopeKind.select_options_for_user(effective_user),
           input_html: revealer("sharing_options", highlander: true),
           label: false, include_blank: false %>
       </div>
       <div class="ih-row" <%= revealer_target_attrs("sharing_options") %>>
-        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: current_user.id, data: {foo: ClarkKent.user_class_name}}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
-        <% ClarkKent::SharingScopeKind.custom_for_user(current_user).each do |sharing_scope_kind| %>
-          <% if sharing_scope_kind.associated_containers_for(current_user).respond_to? :each %>
-            <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(current_user), label: false, include_blank: false,
+        <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: effective_user.id, data: {foo: ClarkKent.user_class_name}}, wrapper_html: revealer_option("sharing_options", trigger: ClarkKent.user_class_name).merge(id: "sharing_options_#{ClarkKent.user_class_name}") %>
+        <% ClarkKent::SharingScopeKind.custom_for_user(effective_user).each do |sharing_scope_kind| %>
+          <% if sharing_scope_kind.associated_containers_for(effective_user).respond_to? :each %>
+            <%= f.input :sharing_scope_id, collection: sharing_scope_kind.associated_containers_for(effective_user), label: false, include_blank: false,
               wrapper_html: revealer_option("sharing_options", trigger: sharing_scope_kind.class_name).merge(id: "sharing_options_#{sharing_scope_kind.class_name}") %>
           <% else %>
-            <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: sharing_scope_kind.associated_containers_for(current_user).id}, wrapper_html: revealer_option("sharing_options", trigger: sharing_scope_kind.associated_containers_for(current_user).class.name).merge(id: "sharing_options_#{sharing_scope_kind.associated_containers_for(current_user).class.name}") %>
+            <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: sharing_scope_kind.associated_containers_for(effective_user).id}, wrapper_html: revealer_option("sharing_options", trigger: sharing_scope_kind.associated_containers_for(effective_user).class.name).merge(id: "sharing_options_#{sharing_scope_kind.associated_containers_for(effective_user).class.name}") %>
           <% end %>
         <% end %>
         <%= f.input :sharing_scope_id, as: :hidden, input_html: {value: ''},
