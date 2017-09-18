@@ -15,4 +15,5 @@ class ApplicationController < ActionController::Base
   alias_method :effective_user, :current_user
 
   helper_method :current_user
+  helper_method :effective_user
 end
