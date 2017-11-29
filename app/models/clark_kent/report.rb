@@ -177,11 +177,11 @@ require 'aws-sdk-v1'
     end
 
     def filter_options_for(filter_name)
-      self.resource_class::REPORT_FILTER_OPTIONS.detect{|filter| filter.param == filter_name}
+      self.resource_class.report_filter_options.detect{|filter| filter.param == filter_name}
     end
 
     def column_options
-      @column_options ||= self.resource_class::REPORT_COLUMN_OPTIONS
+      @column_options ||= self.resource_class.report_column_options
     end
 
     def column_options_for(column_name)
@@ -200,7 +200,7 @@ require 'aws-sdk-v1'
     end
 
     def date_filter_names
-      self.resource_class::REPORT_FILTER_OPTIONS.select{|filter| 'date_filter' == filter.kind}.map{|filter| filter.param}
+      self.resource_class.report_filter_options.select{|filter| 'date_filter' == filter.kind}.map{|filter| filter.param}
     end
 
     ## These are the filters available for defining a report for this resource. They do not include date
@@ -210,23 +210,23 @@ require 'aws-sdk-v1'
     end
 
     def available_filter_options
-      self.available_filters.map{|id| [self.filter_options_for(id).label,id]}
+      self.available_filters.map{|filter_name| [self.filter_options_for(filter_name).label,filter_name]}
     end
 
     ## This is the full set of filter options for defining a report, including the date filters for
     ## an automatic, timed, emailed report.
     def available_email_filters
-      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name| (viable_report_filters.map(&:filter_name)).include? name}
+      self.resource_class.report_definition_options.reject{|name| (viable_report_filters.map(&:filter_name)).include? name}
     end
 
     def collection_for(filter_name)
-      self.resource_class::REPORT_FILTER_OPTIONS.detect{|filter| filter.param == filter_name}.collection
+      self.filter_options_for(filter_name).collection
     end
 
     ## These are the filters available at runtime, ie. not including the ones set to define this report.
     ## If updating the report, this is the set available to add as new report definition filters.
     def custom_filters
-      self.resource_class::REPORT_FILTER_OPTIONS.select{|filter| viable_report_filters.map(&:filter_name).exclude? filter.param}
+      self.resource_class.report_filter_options.select{|filter| viable_report_filters.map(&:filter_name).exclude? filter.param}
     end
 
     ## This is the set of columns not chosed to use in the report. These are the ones available to add
@@ -253,7 +253,7 @@ require 'aws-sdk-v1'
     end
 
     def get_filter_class(params)
-      filter_option = self.resource_class::REPORT_FILTER_OPTIONS.detect{|filter| filter.param == params[:filter_name]}
+      filter_option = self.resource_class.report_filter_options.detect{|filter| filter.param == params[:filter_name]}
       "ClarkKent::Report#{filter_option.kind.camelcase}".constantize
     end
 

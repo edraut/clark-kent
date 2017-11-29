@@ -1,19 +1,15 @@
 module ClarkKent
   module ReportConfig
-    module ClassMethods
-      def filter_config(params)
-        filter_option_class = ('ClarkKent::' + ((params[:kind] + '_option').camelcase)).constantize
-        filter_option_class.new(params)
-      end
+    include ClarkKent::Reportable
+    def filter_config(params)
+      filter_option_class = ('ClarkKent::' + ((params[:kind] + '_option').camelcase)).constantize
+      filter_option_class.new(params)
+    end
 
-      def column_config(params)
-        ClarkKent::ReportColumnConfig.new(params)
-      end
+    def column_config(params)
+      ClarkKent::ReportColumnConfig.new(params)
     end
-    extend ClassMethods
-    def self.included( other )
-      other.extend( ClassMethods )
-    end
+
   end
   class ReportColumnConfig
     attr_accessor :name, :order_sql, :custom_select, :link, :time_zone_column, :time_format, :summarizable, :includes, :joins, :extra_scopes, :where, :group

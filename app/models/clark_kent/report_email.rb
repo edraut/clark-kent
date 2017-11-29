@@ -86,7 +86,7 @@ module ClarkKent
     end
 
     def available_email_filters
-      self.resource_class::REPORT_DEFINITION_OPTIONS.reject{|name, label| (self.viable_report_filters.pluck(:filter_name) + self.report.viable_report_filters.pluck(:filter_name)).include? name}
+      self.resource_class.report_definition_options.reject{|name, label| (self.viable_report_filters.pluck(:filter_name) + self.report.viable_report_filters.pluck(:filter_name)).include? name}
     end
 
     def available_filters
