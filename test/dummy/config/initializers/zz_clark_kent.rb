@@ -6,5 +6,6 @@ ClarkKent.config({
   ],
   user_class_name: 'User',
   other_sharing_scopes: [['Department',:department]],
-  base_controller_name: '::ApplicationController'
+  base_controller_name: '::ApplicationController',
+  current_user_method: :effective_user
 })

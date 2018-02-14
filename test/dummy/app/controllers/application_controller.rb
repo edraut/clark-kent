@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :current_user
+
+  def effective_user
+    current_user
+  end
 end

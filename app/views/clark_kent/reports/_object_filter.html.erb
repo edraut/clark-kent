@@ -5,7 +5,7 @@
 	<div class="ih-row">
 		<% options = case filter.collection.class.name
 			 when 'String', 'Symbol'
-			   current_user.send(filter.collection)
+			   clark_kent_user.send(filter.collection)
 			 when 'Array'
 			   filter.collection
 			 end %>

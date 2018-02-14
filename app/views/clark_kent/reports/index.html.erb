@@ -1,6 +1,6 @@
 <h1>Reports</h1>
 <% ClarkKent::SharingScopeKind.all.each do |sharing_scope_kind| %>
-  <% sharing_scope_kind.scopes_for(current_user).each do |sharing_scope| %>
+  <% sharing_scope_kind.scopes_for(clark_kent_user).each do |sharing_scope| %>
     <% if sharing_scope.reports.any? %>
       <div id="<%= sharing_scope.dom_id %>">
         <h3><%= sharing_scope.human_name %></h3>

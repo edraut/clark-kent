@@ -5,7 +5,7 @@ require 'aws-sdk-v1'
 
 module ClarkKent
   mattr_accessor  :resource_options, :user_class_name, :other_sharing_scopes, :base_controller,
-                  :custom_report_links
+                  :custom_report_links, :current_user_method
 
   def self.bucket_name
     @@bucket_name || "clark-kent"
@@ -19,11 +19,13 @@ module ClarkKent
     base_controller_name = options[:base_controller_name]
     @@base_controller = base_controller_name.constantize if base_controller_name.present?
     @@custom_report_links = options[:custom_report_links] || []
+    @@current_user_method = options[:current_user_method]
   end
 
   def self.user_class
     @@user_class = (@@user_class_name || "User").constantize
   end
+
 
 end
 

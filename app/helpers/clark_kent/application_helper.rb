@@ -79,7 +79,7 @@ module ClarkKent
 
     def collection_for(report_filter,name)
       if report_filter.filterable.collection_for(name).is_a? Symbol
-        current_user.send(report_filter.filterable.collection_for(name))
+        clark_kent_user.send(report_filter.filterable.collection_for(name))
       else
         report_filter.filterable.collection_for(name)
       end
