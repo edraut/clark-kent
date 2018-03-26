@@ -13,6 +13,7 @@
           ajax_form: true,
           sub_type: "AddALineForm",
           ajax_target: report_filter.new_record? ? "#report_filter_list_#{dom_id(report_filter.filterable)}" : "#report_filter_#{report_filter.id}",
+          error_target: "#new_report_filter_container_#{dom_id(report_filter.filterable)}",
           insert_method: report_filter.new_record? ? 'append' : 'html',
           container: dom_target(report_filter.filterable, :new_report_filter_container),
           ajax_flash: true } } do |f| %>
