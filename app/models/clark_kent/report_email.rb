@@ -51,9 +51,11 @@ module ClarkKent
         end
       end
       report_download_url = ClarkKent::Report.send_report_to_s3(self.id, params)
-      ClarkKent::ReportMailer.report_run(self.report_id, user_id, report_download_url).deliver
+      mail = ClarkKent::ReportMailer.report_run(self.report_id, user_id, report_download_url)
+      Sendgrid.send_message(mail)
     rescue ClarkKent::ReportFilterError => e
-      ClarkKent::ReportMailer.report_error(self.report_id, user_id, e.message).deliver
+      mail = ClarkKent::ReportMailer.report_error(self.report_id, user_id, e.message)
+      Sendgrid.send_message(mail)
     end
 
     def report_filter_params
