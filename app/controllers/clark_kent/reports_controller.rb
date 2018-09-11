@@ -31,13 +31,7 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     else
       prepare_params(params.permit!) if defined? prepare_params
       if params[:run_report].present?
-        @these_params.each do |k,v|
-          if @report.date_filter_names.detect{|fn|
-            @report.filter_options_for(fn).filter_params.include? k.to_s
-          }.present?
-            @these_params[k] = parse_date(v)
-          end
-        end
+        parse_date_filters
         @these_params[:page] = params[:page]
         @these_params[:per] = @report.resource_class.default_per_page
         begin
@@ -54,8 +48,9 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
 
   def download_link
     @report = ClarkKent::Report.where(id: params[:id]).first
-    prepare_params if defined? prepare_params
+    prepare_params(params.permit!) if defined? prepare_params
     @report_result_name = "report-#{@report.id}-#{Time.now.to_formatted_s(:number)}"
+    parse_date_filters if params[:run_report].present?
     @these_params[:report_result_name] = @report_result_name
     ConeyIsland.submit(ClarkKent::Report,
                       :send_report_to_s3,
@@ -128,4 +123,13 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     year
   end
 
+  def parse_date_filters
+    @these_params.each do |k,v|
+      if @report.date_filter_names.detect{|fn|
+        @report.filter_options_for(fn).filter_params.include? k.to_s
+      }.present?
+        @these_params[k] = parse_date(v)
+      end
+    end
+  end
 end
