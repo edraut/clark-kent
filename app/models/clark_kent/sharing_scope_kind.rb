@@ -4,8 +4,12 @@ module ClarkKent
 
     def self.all
       return @ss_types if @ss_types
-      user_ss = self.new(ClarkKent.user_class_name)
-      @ss_types = [user_ss]
+      if ClarkKent.user_class_name
+        user_ss = self.new(ClarkKent.user_class_name)
+        @ss_types = [user_ss]
+      else
+        @ss_types = []
+      end
       ClarkKent.other_sharing_scopes.each do |ss_type|
         @ss_types << self.new(*ss_type)
       end

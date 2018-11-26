@@ -4,10 +4,14 @@ require 'aws-sdk-v1'
   Dir.glob(Rails.root.join('app/models/reporting/*.rb')) { |file| load file }
   class Report < ActiveRecord::Base
     include ClarkKent::Cloneable
+    include ForeignOffice::Broadcaster
+
+    require_channel_presence
+
 
     SortDirections = {'ascending' => 'asc', 'descending' => 'desc'}
 
-    attr_accessor :summary_row_storage
+    attr_accessor :summary_row_storage, :report_result_url, :browser_tab_id
 
     belongs_to :sharing_scope, polymorphic: true
     has_many :report_filters, as: :filterable, dependent: :destroy
@@ -58,17 +62,19 @@ require 'aws-sdk-v1'
           buffer << chunk
         end
       end
-      report_result_url = report_destination.url_for(
+      report.report_result_url = report_destination.url_for(
         :read,
         secure: true,
         response_content_type: 'text/csv',
         response_content_encoding: 'binary',
+        response_content_disposition: 'attachment',
         expires: 60*60*24*30 #good for 30 days
       )
       if 'ClarkKent::Report' == report_class.name
-        ForeignOffice.publish(channel: params[:report_result_name], object: {report_result_url: report_result_url.to_s} )
+        report.browser_tab_id = params[:browser_tab_id]
+        report.broadcast_change
       end
-      report_result_url.to_s
+      report.report_result_url.to_s
     end
 
     def viable_report_columns
@@ -315,6 +321,11 @@ require 'aws-sdk-v1'
       end
     end
 
+    def serialize
+      { report_result_url: self.report_result_url,
+        browser_tab_id: self.browser_tab_id
+      }
+    end
   end
 
   class ReportSort

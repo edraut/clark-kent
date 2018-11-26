@@ -1,4 +1,4 @@
-<div class="ih-row editing">
+<div class="srow editing">
   <%= simple_form_for user_report_email,
       defaults: {
         wrapper_html: { class: 'span2'},
@@ -14,15 +14,15 @@
           error_target: "#new_user_report_email_container_#{user_report_email.report_email_id}",
           container: "#new_user_report_email_container_#{user_report_email.report_email_id}",
           ajax_flash: true }} do |f| %>
-    <div class="ih-span">
+    <div class="scol">
       <%= f.input :report_email_id, as: :hidden %>
       <% if user_report_email.new_record? %>
         <%= f.input :email, label: 'email address' %>
       <% else %>
-        <div class="ih-row"><%= user_report_email.email %></div>
+        <div class="srow"><%= user_report_email.email %></div>
       <% end %>
     </div>
-    <div class="ih-span right margin-top">
+    <div class="scol right margin-top">
       <%= f.button :submit %>
       <% unless user_report_email.new_record? %>
         &nbsp; <%= link_to 'cancel', user_report_email_url(user_report_email),

@@ -15,14 +15,14 @@
         insert_method: report_email.new_record? ? 'append' : 'html',
         container: "new_report_email_container_#{report_email.report_id}",
         ajax_flash: true }} do |f| %>
-  <div class="ih-span one-third">
+  <div class="scol one-third">
     <%= f.input :name %>
   </div>
-  <div class="ih-span one-third">
+  <div class="scol one-third">
     <%= f.input :report_id, as: :hidden %>
     <%= f.input :when_to_send, collection: ClarkKent::ReportEmail::SEND_TIMES, include_blank: false %>
   </div>
-  <div class="ih-span one-third right margin-top">
+  <div class="scol one-third right margin-top">
     <%= f.button :submit %>
     <% unless report_email.new_record? %>
       &nbsp; <%= link_to 'cancel', report_email_url(report_email),

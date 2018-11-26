@@ -6,7 +6,7 @@
 		<%= @errors %>
 	</div>
 <% end %>
-<div class="ih-row margin-top">
+<div class="srow margin-top">
 	<form action="<%= report_url(@report) %>" method="get">
 		<% @report.custom_filters.each do |filter| %>
 			<%= render partial: filter.kind, locals: {filter: filter} %>
@@ -17,7 +17,7 @@
 	</form>
 </div>
 <% if @rows %>
-	<div class="ih-row margin-top">
+	<div class="srow margin-top">
 		<table class="stripey-table">
 			<tr>
 				<% @report.report_columns.sorted.each do |column| %>
@@ -39,10 +39,10 @@
 			<% end %>
 		</table>
 	</div>
-	<div class="ih-row margin-top">
+	<div class="srow margin-top">
 	  <%= paginate @rows %>
 	  <div id="download_link"><%= render partial: 'download_link' %></div>
 	</div>
 <% end %>
-<div class="ih-span">&nbsp;</div>
+<div class="scol">&nbsp;</div>
 

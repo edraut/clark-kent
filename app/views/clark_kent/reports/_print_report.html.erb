@@ -11,7 +11,7 @@
         &nbsp;
       </div>
       <div class="modal-body">
-        <p> You will only be printing the current page of results (50 of <%= @rows.total_count %> total results).
+        <p> You will only be printing the current page of results (<%= @report.resource_class.default_per_page %> of <%= @rows.total_count %> total results).
             To print all results click the <strong>download full csv</strong> link at the bottom of the page.</p>
         <div class="row-fluid" >
           <div class="span8"></div>

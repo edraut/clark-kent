@@ -1,17 +1,17 @@
-<div class="ih-row read-only">
-	<div class="ih-span one-fifth">
+<div class="srow read-only report-element">
+	<div class="scol one-fifth">
 		<%= report_column.column_name %>
 	</div>
-	<div class="ih-span one-fifth">
+	<div class="scol one-fifth">
 		<%= report_column.column_order %>
 	</div>
-	<div class="ih-span one-fifth">
+	<div class="scol one-fifth">
 		<%= report_column.summary_method.present? ? "summarize: #{report_column.summary_method}" : '' %>
 	</div>
-	<div class="ih-span one-fifth">
+	<div class="scol one-fifth">
 		<%= report_column.report_sort_pretty %>
 	</div>
-	<div class="ih-span right">
+	<div class="scol right">
 		<%= link_to 'edit', edit_report_column_url(report_column),
 				data: {
 					ajax_link: true,

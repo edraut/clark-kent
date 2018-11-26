@@ -1,4 +1,4 @@
-<div class="ih-row editing">
+<div class="srow editing">
   <%= simple_form_for report_column,
       defaults: {
         wrapper_html: { class: 'span2'},
@@ -13,31 +13,31 @@
           insert_method: report_column.new_record? ? 'append' : 'html',
           container: '#new_report_column_container',
           ajax_flash: true } } do |f| %>
-    <div class="ih-span one-fifth">
+    <div class="scol one-fifth">
       <%= f.input :report_id, as: :hidden %>
       <% if report_column.new_record? %>
         <%= f.input :column_name, collection: @report.available_columns, prompt: 'select column' %>
       <% else %>
-        <div class="ih-row quiet">Column Name</div>
-        <div class="ih-row"><%= report_column.column_name %></div>
+        <div class="srow quiet">Column Name</div>
+        <div class="srow"><%= report_column.column_name %></div>
       <% end %>
     </div>
-    <div class="ih-span one-fifth">
+    <div class="scol one-fifth">
       <%= f.input :column_order %>
     </div>
-    <div class="ih-span one-fifth">
+    <div class="scol one-fifth">
       <% if !report_column.new_record? and report_column.summarizable? %>
         <%= f.input :summary_method, collection: ClarkKent::ReportColumn::SummaryMethods %>
       <% else %>
         &nbsp;
       <% end %>
     </div>
-    <div class="ih-span one-fifth">
+    <div class="scol one-fifth">
       <% if report_column.report.sort_column.blank? || report_column.report.sort_column == report_column %>
         <%= f.input :report_sort, collection: [['A->Z','ascending'],['Z->A','descending']], include_blank: true %>
       <% end %>
     </div>
-    <div class="ih-span right margin-top">
+    <div class="scol right margin-top">
       <%= f.button :submit %>
       <% unless report_column.new_record? %>
         &nbsp; <%= link_to 'cancel', report_column_url(report_column),

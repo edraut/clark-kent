@@ -1,17 +1,17 @@
-<div class="ih-row read-only">
-	<div class="ih-span one-quarter">
+<div class="srow read-only report-element">
+	<div class="scol one-quarter">
 		<%= report_email.name %> <span class="quiet">send</span> <%= report_email.when_to_send %>
 	</div>
-	<div class="ih-span one-quarter">
+	<div class="scol one-quarter">
 		<%= link_to 'edit', edit_report_email_url(report_email),
 				data: {
 					ajax_link: true,
 					ajax_target: "#report_email_#{report_email.id}" } %>
 	</div>
-	<div class="ih-span one-quarter">
+	<div class="scol one-quarter">
 		<%= report_email.period_pretty %>
 	</div>
-	<div class="ih-span one-quarter">
+	<div class="scol one-quarter">
 		<%= display_for_value(report_email.emails) %>
 	</div>
 </div>

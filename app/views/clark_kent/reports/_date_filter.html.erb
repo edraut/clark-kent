@@ -1,24 +1,22 @@
-<div class="ih-span one-quarter">
-	<div class="ih-row">
-		<%= filter.label.humanize %>
+<div class="scol one-quarter report-filter">
+	<div class="srow">
+		<b><%= filter.label.humanize %></b>
 	</div>
-	<div class="ih-row">
-		<div class="ih-span">
+	<div class="srow">
+		<div class="scol">
 		  from<br>
-		  <%= text_field_tag "#{filter.param}_from",
+		  <%= date_field_tag "#{filter.param}_from",
 		            params["#{filter.param}_from"],
-		            data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
+		            data: {date_picker: 'true'},
 		            class: 'string input-small',
-			          readonly: true,
 		            id: "#{filter.param}_start_date" %>
 		</div>
-		<div class="ih-span">
+		<div class="scol">
 		  to<br>
-		  <%= text_field_tag "#{filter.param}_until",
+		  <%= date_field_tag "#{filter.param}_until",
 		          params["#{filter.param}_until"],
-		          data: {date_picker: 'true', sub_type: 'DatePickerLoader'},
+		          data: {date_picker: 'true'},
 		          class: 'string input-small',
-		          readonly: true,
 		          id: "#{filter.param}_end_date" %>
 		</div>
 	</div>

@@ -1,16 +1,16 @@
 <div id="user_report_emails_container_<%= report_email.id %>">
   <h3>Who to email</h3>
-  <div id="user_report_email_list_<%= report_email.id %>" class="ih-row">
+  <div id="user_report_email_list_<%= report_email.id %>" class="srow">
 	  <% for user_report_email in report_email.user_report_emails %>
       <%= render partial: '/clark_kent/user_report_emails/show_wrapper', locals: {user_report_email: user_report_email} %>
     <% end %>
   </div>
 
-  <div class="ih-row margin-top">
+  <div class="srow margin-top">
     <%= link_to 'Add an email address', new_user_report_email_url(report_email_id: report_email.id), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: "#new_user_report_email_container_#{report_email.id}" } %>
   </div>
 
-  <div id="new_user_report_email_container_<%= report_email.id %>" class="ih-row margin-top">
+  <div id="new_user_report_email_container_<%= report_email.id %>" class="srow margin-top">
 
   </div>
 </div>

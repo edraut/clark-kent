@@ -1,11 +1,11 @@
-<div class="ih-row read-only">
-	<div class="ih-span one-third">
-		<%= report_filter.display_name %>
+<div class="srow read-only report-element">
+	<div class="scol one-third">
+		<%= report_filter.display_name %> ->
 	</div>
-	<div class="ih-span one-third">
+	<div class="scol one-third">
 		<%= render partial: '/clark_kent/report_filters/' + report_filter.filterable.filter_kind(report_filter.filter_name) + '_show', locals: {report_filter: report_filter} %>
 	</div>
-	<div class="ih-span right">
+	<div class="scol right">
 		<%= link_to 'edit', edit_report_filter_url(report_filter),
 				data: {
 					ajax_link: true,

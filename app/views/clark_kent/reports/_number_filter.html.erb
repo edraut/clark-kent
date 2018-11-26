@@ -1,16 +1,16 @@
-<div class="ih-span one-quarter">
-	<div class="ih-row">
-		<%= filter.label.humanize %>
+<div class="scol one-quarter report-filter">
+	<div class="srow">
+		<b><%= filter.label.humanize %></b>
 	</div>
-	<div class="ih-row">
-		<div class="ih-span">
+	<div class="srow">
+		<div class="scol">
 		  min<br>
 		  <%= text_field_tag "#{filter.param}_min",
 		            params["#{filter.param}_min"],
 		            class: 'string input-small',
 		            id: "#{filter.param}_min" %>
 		</div>
-		<div class="ih-span">
+		<div class="scol">
 		  max<br>
 		  <%= text_field_tag "#{filter.param}_max",
 		          params["#{filter.param}_max"],

@@ -1,13 +1,13 @@
-<div class="ih-span one-quarter">
+<div class="scol one-quarter">
 	<%= @report.name %>
 </div>
-<div class="ih-span one-quarter">
+<div class="scol one-quarter">
 	<span class="quiet">a row for every</span> <%= @report.resource_type_pretty.singularize %>
 </div>
-<div class="ih-span one-quarter">
+<div class="scol one-quarter">
 	<span class="quite">shared with</span> <%= @report.sharing_scope_pretty %>
 </div>
-<div class="ih-span one-quarter right">
+<div class="scol one-quarter right">
   <%= link_to 'clone', clone_report_url(@report),
       method: :post,
       style: 'margin-left: 10px',

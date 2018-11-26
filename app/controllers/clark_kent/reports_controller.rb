@@ -52,11 +52,11 @@ class ClarkKent::ReportsController < ClarkKent::ApplicationController
     @report_result_name = "report-#{@report.id}-#{Time.now.to_formatted_s(:number)}"
     parse_date_filters if params[:run_report].present?
     @these_params[:report_result_name] = @report_result_name
+    @these_params[:browser_tab_id] = @browser_tab_id
     ConeyIsland.submit(ClarkKent::Report,
                       :send_report_to_s3,
                       args: [@report.id, @these_params],
-                      timeout: 300,
-                      work_queue: 'boardwalk')
+                      timeout: 300)
     render partial: 'download_link'
   end
 

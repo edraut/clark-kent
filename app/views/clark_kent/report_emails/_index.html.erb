@@ -1,16 +1,16 @@
 <div id="report_email_container">
   <h3>Timed Emails</h3>
-  <div id="report_email_list" class="ih-row">
+  <div id="report_email_list" class="srow">
     <% for report_email in @report.report_emails %>
       <%= render partial: '/clark_kent/report_emails/show_wrapper', locals: {report_email: report_email} %>
     <% end %>
   </div>
 
-  <div class="ih-row margin-top">
+  <div class="srow margin-top">
     <%= link_to 'Add a timed email', new_report_email_url(report_id: @report.id), class: 'btn btn-primary', data: {ajax_link: "true", ajax_target: "#new_report_email_container_#{@report.id}" } %>
   </div>
 
-  <div id="new_report_email_container_<%= @report.id %>" class="ih-row margin-top">
+  <div id="new_report_email_container_<%= @report.id %>" class="srow margin-top">
 
   </div>
 </div>
