@@ -69,7 +69,7 @@ module ClarkKent
     def print_button(rows, from_modal=false)
       if rows
         onclick_str = "window.print()"
-        onclick_str.prepend("$('#print_report_modal').modal('hide');") if from_modal
+        onclick_str.prepend("$('#hooch-dismiss').click();") if from_modal
         link_to 'Print',
                 'javascript:void(0)',
                 class: 'btn',
