@@ -53,9 +53,11 @@ module ClarkKent
 	    report.extra_filters.each do |extra_filter|
 	    	@extra_filters.push extra_filter
 	    end
-	    report.groups.each do |grouper|
-	    	@groups.push grouper
-	    end
+			if count == false
+		    report.groups.each do |grouper|
+		    	@groups.push grouper
+		    end
+		  end
 	    query = self.all
 	    if @report_email and @report_email.is_a? ClarkKent::ReportEmail
 				params = @report_email.report_filter_params.symbolize_keys!.merge(params.symbolize_keys)

@@ -6,7 +6,7 @@
 		<% options = case filter.collection.class.name
 			 when 'String', 'Symbol'
 			   clark_kent_user.send(filter.collection)
-			 when 'Array'
+			 when 'Array', 'ActiveRecord::Relation'
 			   filter.collection
 			 end %>
 		<%= select_tag filter.param,
