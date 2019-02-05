@@ -1,2 +1,7 @@
-Click this link to download your report:
-<a href="<%= @report_download_url %>"><%= @report.name %></a>
+<% if @report_download_url %>
+  Click this link to download your report:
+  <a href="<%= @report_download_url %>"><%= @report.name %></a>
+<% elsif @report_filename %>
+  Your report is ready to download. Log into your Amazon S3 account and download 
+  <%= @report_filename %>.
+<% end %>

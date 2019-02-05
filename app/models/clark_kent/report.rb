@@ -28,8 +28,10 @@ require 'aws-sdk-v1'
     def self.send_report_to_s3(report_id, params)
       report_class = params[:report_class].constantize if params[:report_class]
       report_class ||= ::ClarkKent::Report
+
       reportable = report_class.find(report_id)
-      report = ('ClarkKent::ReportEmail' == report_class.name) ? reportable.report : reportable
+      is_email = 'ClarkKent::ReportEmail' == report_class.name
+      report = is_email ? reportable.report : reportable
       query = reportable.get_query(params)
       row_count = reportable.get_query(params, true)
       bucket = AWS::S3::Bucket.new(ClarkKent.bucket_name)
@@ -74,7 +76,11 @@ require 'aws-sdk-v1'
         report.browser_tab_id = params[:browser_tab_id]
         report.broadcast_change
       end
-      report.report_result_url.to_s
+      if is_email && 'login_required' == ClarkKent.email_security
+        params[:report_result_name]
+      else
+        report.report_result_url.to_s
+      end
     end
 
     def viable_report_columns

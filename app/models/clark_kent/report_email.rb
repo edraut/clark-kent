@@ -33,7 +33,7 @@ module ClarkKent
 
     def send_emails
       self.user_report_emails.each do |user_report_email|
-        ConeyIsland.submit(ClarkKent::ReportEmail, :send_email, instance_id: self.id, args: [user_report_email.user_id], timeout: 300, work_queue: 'boardwalk')
+        ConeyIsland.submit(ClarkKent::ReportEmail, :send_email, instance_id: self.id, args: [user_report_email.user_id], timeout: 300, work_queue: ClarkKent.work_queue)
       end
     end
 
@@ -52,10 +52,10 @@ module ClarkKent
       end
       report_download_url = ClarkKent::Report.send_report_to_s3(self.id, params)
       mail = ClarkKent::ReportMailer.report_run(self.report_id, user_id, report_download_url)
-      Sendgrid.send_message(mail)
+      mail.deliver_now
     rescue ClarkKent::ReportFilterError => e
       mail = ClarkKent::ReportMailer.report_error(self.report_id, user_id, e.message)
-      Sendgrid.send_message(mail)
+      mail.deliver_now
     end
 
     def report_filter_params
