@@ -1,6 +1,6 @@
 module ClarkKent
   class ReportMailer < ActionMailer::Base
-  	default from: 'reservations@invitedhome.com'
+  	default from: 'hello@silvernest.com'
 
   	def report_run(report_id, user_id, report_accessor)
   		@report = Report.find(report_id)
