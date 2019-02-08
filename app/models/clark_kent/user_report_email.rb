@@ -8,7 +8,7 @@ module ClarkKent
 	  validates_with UserEmailValidator
 
 		def email=(address)
-			self.user = ClarkKent.user_class.where("lower(#{ClarkKent.user_class_name.underscore.pluralize}.email) = lower(:email)",email: address).first
+			self.user = ClarkKent.user_class.where("lower(#{ClarkKent.user_class_name.underscore.pluralize.gsub(/\//,'')}.email) = lower(:email)",email: address).first
 			self.errors.add(:email, "Couldn't find a user with that email addres") unless self.user.present?
 		end
 
