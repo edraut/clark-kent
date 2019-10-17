@@ -8,10 +8,17 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
   end
 
   def create
-    report_filter_class = @filterable.get_filter_class(report_filter_params)
-    @report_filter = report_filter_class.new(report_filter_params)
-    @report_filter.save
-    render partial: 'show_wrapper', locals: {report_filter: @report_filter}
+    service = ClarkKent::ReportFiltersController::CreateReportFilter.new(@filterable, report_filter_params)
+    service.create
+    if service.errors.any?
+      report_filter = ClarkKent::ReportFilter.new(filterable_id: @filterable.id, filterable_type: @filterable.class.name)
+      render json: {
+        html: render_to_string(partial: 'form', locals: {report_filter: service.report_filter}),
+        flash_message: service.errors.join(', ')
+      }, status: :conflict
+    else
+      render partial: 'show_wrapper', locals: {report_filter: service.report_filter}
+    end
   end
 
   def show
@@ -39,20 +46,22 @@ class ClarkKent::ReportFiltersController < ClarkKent::ApplicationController
   end
 
   def prepare_report
-    @filterable_id = params[:filterable_id]
-    @filterable_type = params[:filterable_type]
-    @filterable_id ||= params[:report_filter][:filterable_id] if params[:report_filter]
-    @filterable_type ||= params[:report_filter][:filterable_type] if params[:report_filter]
-    @filterable_class = @filterable_type.constantize if @filterable_type
-    @filterable = @filterable_class.find(@filterable_id) if @filterable_id and @filterable_class
-    @filterable ||= @report_filter.filterable if @report_filter
+    @filterable_id      = params[:filterable_id]
+    @filterable_type    = params[:filterable_type]
+    @filterable_id    ||= params[:report_filter][:filterable_id] if params[:report_filter]
+    @filterable_type  ||= params[:report_filter][:filterable_type] if params[:report_filter]
+    @filterable_id    ||= params[:report_date_filter][:filterable_id] if params[:report_date_filter]
+    @filterable_type  ||= params[:report_date_filter][:filterable_type] if params[:report_date_filter]
+    @filterable_class   = @filterable_type.constantize if @filterable_type
+    @filterable         = @filterable_class.find(@filterable_id) if @filterable_id and @filterable_class
+    @filterable       ||= @report_filter.filterable if @report_filter
   end
 
   def report_filter_params
     if @report_filter
       these_params = params[@report_filter.class.name.underscore.gsub(/.*\//,'')]
     else
-      these_params = params[:report_filter]
+      these_params = params[:report_filter] || params[:report_date_filter]
     end
     these_params.permit(:filterable_id, :filterable_type, :string, :filter_name, :filter_value, :type, :duration, :kind_of_day, :offset)
   end
